@@ -59,6 +59,8 @@ audit-cli/
     test_schemas.py
     test_discovery.py
     test_functional.py
+    test_normalizer.py
+    test_security_driver.py
 ```
 
 ## Docker Services
@@ -96,8 +98,33 @@ audit discover <url> [--spec PATH] [--header "Authorization: Bearer x"] --out re
 # Functional test saja
 audit functional --registry results/<run_id>/registry.json [--run-id <id>]
 
+# Security audit saja (ZAP + scanner kedua)
+audit security --registry results/<run_id>/registry.json --scanner2 nuclei --out results/<run_id> --max-minutes 30
+
 # Full pipeline (Blok 2+)
 audit run <url> [--spec PATH] [--header "..."] [--run-id <id>] [--scanner2 nuclei|arachni]
+```
+
+### Menjalankan Security Scan di Background & Monitoring
+
+Pemindaian keamanan (ZAP + Scanner kedua) membutuhkan waktu 20–60 menit. Jalankan di background agar terminal tidak terblokir:
+
+**Di Windows (PowerShell):**
+```powershell
+# Jalankan di background
+Start-Process -NoNewWindow audit -ArgumentList "security --registry results/run1/registry.json --scanner2 nuclei --out results/run1 --max-minutes 30"
+
+# Monitor progres secara real-time
+Get-Content -Wait -Tail 20 results\run1\security.log
+```
+
+**Di Linux / macOS (Bash):**
+```bash
+# Jalankan di background
+nohup audit security --registry results/run1/registry.json --scanner2 nuclei --out results/run1 --max-minutes 30 > /dev/null 2>&1 &
+
+# Monitor progres secara real-time
+tail -f results/run1/security.log
 ```
 
 ## Keputusan Desain
@@ -111,20 +138,28 @@ audit run <url> [--spec PATH] [--header "..."] [--run-id <id>] [--scanner2 nucle
    0–100. Ini menyederhanakan metrik resource menjadi satu angka "headroom".
 
 3. **Nuclei sebagai scanner kedua** (pengganti Arachni yang deprecated). Nuclei aktif
-   dikembangkan, memiliki >6000 template vulnerability, dan lebih reliable di Docker.
+   dikembangkan, memiliki >6000 template vulnerability, dan lebih reliable di Docker. Jika `--scanner2 arachni` dipilih tetapi gagal/tidak ada docker, sistem secara otomatis mencoba fallback ke Nuclei.
 
-4. **OpenAPI spec manual untuk Juice Shop** – Juice Shop tidak menyediakan spec lengkap,
+4. **Eksekusi Paralel ZAP & Scanner kedua** – Driver keamanan menggunakan `ThreadPoolExecutor` untuk menjalankan pemindaian ZAP dan Scanner kedua secara bersamaan, menghemat waktu total eksekusi hingga ~50%.
+
+5. **Fault Tolerance Scanner** – Jika salah satu scanner (ZAP atau Scanner kedua) gagal, error dicatat dalam file raw masing-masing (`zap_raw.json` atau `scanner2_raw.json`), dan proses normalisasi tetap berjalan tanpa membuat seluruh proses audit crash.
+
+6. **Normalisasi Route & Deduplikasi** – Segmen path berupa numerik (misal `/api/Products/42`) atau format UUID secara otomatis diganti menjadi `{id}` (`/api/Products/{id}`), dan query string dihilangkan agar deduplikasi temuan antar-tool akurat.
+
+7. **Dataset WAF Real-Time** – Request history dari Active Scan ZAP diekstrak otomatis dan disimpan ke `zap_attack_requests.json` dengan label `attack` untuk digunakan sebagai dataset pengujian ML-WAF (Blok 3).
+
+8. **OpenAPI spec manual untuk Juice Shop** – Juice Shop tidak menyediakan spec lengkap,
    sehingga 15 endpoint representatif didefinisikan manual di `data/openapi_juiceshop.yaml`.
 
-5. **Functional driver tidak crash pada mismatch** – Test case yang gagal dicatat sebagai
+9. **Functional driver tidak crash pada mismatch** – Test case yang gagal dicatat sebagai
    `passed: false` dengan detail, bukan exception yang menghentikan audit.
 
-6. **Traffic hanya ke staging lokal** – URL non-lokal ditolak kecuali flag `--allow-remote`
-   diberikan, untuk mencegah audit yang tidak disengaja ke production.
+10. **Traffic hanya ke staging lokal** – URL non-lokal ditolak kecuali flag `--allow-remote`
+    diberikan, untuk mencegah audit yang tidak disengaja ke production.
 
-7. **Param field menggunakan alias `in`** – Pydantic model `Param` menyimpan lokasi sebagai
-   `location` secara internal, tetapi serialisasi menggunakan alias `"in"` agar sesuai dengan
-   format OpenAPI spec.
+11. **Param field menggunakan alias `in`** – Pydantic model `Param` menyimpan lokasi sebagai
+    `location` secara internal, tetapi serialisasi menggunakan alias `"in"` agar sesuai dengan
+    format OpenAPI spec.
 
 ## Rumus Scorecard
 
