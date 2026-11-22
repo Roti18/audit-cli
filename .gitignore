@@ -1,5 +1,6 @@
 results/
 *.joblib
+!audit/mlwaf/model.joblib
 __pycache__/
 *.pyc
 .pytest_cache/

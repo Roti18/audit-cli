@@ -46,3 +46,25 @@ services:
     entrypoint: ["sleep", "infinity"]
     networks:
       - audit-net
+
+  clean-api:
+    image: python:3.11-slim
+    container_name: clean-api
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "pip install flask && python -m audit.clean_api"
+    ports:
+      - "5000:5000"
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - audit-net

@@ -1,0 +1,167 @@
+[
+  {
+    "id": "GT-01",
+    "name": "SQL Injection pada endpoint Login",
+    "cwe": "CWE-89",
+    "route": "/rest/user/login",
+    "method": "POST",
+    "param": "email",
+    "severity": "Critical",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Bypass autentikasi menggunakan SQLi ' OR 1=1--"
+  },
+  {
+    "id": "GT-02",
+    "name": "SQL Injection pada pencarian produk",
+    "cwe": "CWE-89",
+    "route": "/rest/products/search",
+    "method": "GET",
+    "param": "q",
+    "severity": "High",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Union-based SQLi untuk ekstraksi data tabel SQLite"
+  },
+  {
+    "id": "GT-03",
+    "name": "Reflected Cross-Site Scripting (XSS) pada pencarian",
+    "cwe": "CWE-79",
+    "route": "/rest/products/search",
+    "method": "GET",
+    "param": "q",
+    "severity": "Medium",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Parameter q dicerminkan kembali tanpa encoding yang memadai"
+  },
+  {
+    "id": "GT-04",
+    "name": "SQL Injection pada pelacakan pesanan",
+    "cwe": "CWE-89",
+    "route": "/rest/track-order/{id}",
+    "method": "GET",
+    "param": "id",
+    "severity": "High",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Injeksi parameter id pesanan tanpa sanitasi"
+  },
+  {
+    "id": "GT-05",
+    "name": "Stored XSS pada form feedback/ulasan pelanggan",
+    "cwe": "CWE-79",
+    "route": "/api/Feedbacks",
+    "method": "POST",
+    "param": "comment",
+    "severity": "High",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Komentar disimpan ke database dan dieksekusi di browser admin"
+  },
+  {
+    "id": "GT-06",
+    "name": "Path Traversal pada unduhan berkas publik/FTP",
+    "cwe": "CWE-22",
+    "route": "/ftp",
+    "method": "GET",
+    "param": "file",
+    "severity": "High",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Directory traversal via ../ untuk membaca berkas rahasia seperti package.json.bak"
+  },
+  {
+    "id": "GT-07",
+    "name": "SQL Injection pada detail produk",
+    "cwe": "CWE-89",
+    "route": "/api/Products/{id}",
+    "method": "GET",
+    "param": "id",
+    "severity": "High",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Injeksi pada segmen id produk di REST API Sequelize"
+  },
+  {
+    "id": "GT-08",
+    "name": "Information Disclosure versi aplikasi backend",
+    "cwe": "CWE-200",
+    "route": "/rest/admin/application-version",
+    "method": "GET",
+    "param": null,
+    "severity": "Low",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Membocorkan versi pasti node.js package untuk penargetan CVE"
+  },
+  {
+    "id": "GT-09",
+    "name": "SQL Injection pada penambahan keranjang belanja",
+    "cwe": "CWE-89",
+    "route": "/api/BasketItems",
+    "method": "POST",
+    "param": "ProductId",
+    "severity": "High",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Injeksi parameter kuantitas/produk di endpoint BasketItems"
+  },
+  {
+    "id": "GT-10",
+    "name": "Broken Object Level Authorization (BOLA/IDOR) Keranjang",
+    "cwe": "CWE-639",
+    "route": "/rest/basket/{id}",
+    "method": "GET",
+    "param": "id",
+    "severity": "High",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Mengakses keranjang pengguna lain hanya dengan mengganti ID keranjang"
+  },
+  {
+    "id": "GT-11",
+    "name": "Insecure Direct Object Reference pada Profil Pengguna",
+    "cwe": "CWE-639",
+    "route": "/api/Users/{id}",
+    "method": "GET",
+    "param": "id",
+    "severity": "High",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "IDOR membaca dan mengubah profil pengguna lain"
+  },
+  {
+    "id": "GT-12",
+    "name": "Command Injection / RCE pada pemrosesan B2B order",
+    "cwe": "CWE-78",
+    "route": "/b2b/v2/orders",
+    "method": "POST",
+    "param": "order",
+    "severity": "Critical",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Remote code execution pada parsing XML/JSON order eksternal"
+  },
+  {
+    "id": "GT-13",
+    "name": "Server-Side Template Injection (SSTI)",
+    "cwe": "CWE-94",
+    "route": "/profile",
+    "method": "POST",
+    "param": "username",
+    "severity": "High",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Eksekusi kode melalui template engine pug/handlebars"
+  },
+  {
+    "id": "GT-14",
+    "name": "SQL Injection pada registrasi pengguna baru",
+    "cwe": "CWE-89",
+    "route": "/api/Users",
+    "method": "POST",
+    "param": "email",
+    "severity": "Critical",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "Penyisipan payload SQLi pada kolom email saat registrasi"
+  },
+  {
+    "id": "GT-15",
+    "name": "Reflected XSS via User-Agent Header / Error Page",
+    "cwe": "CWE-79",
+    "route": "/",
+    "method": "GET",
+    "param": "User-Agent",
+    "severity": "Medium",
+    "perlu_verifikasi_manual": true,
+    "keterangan": "XSS saat halaman 404 menampilkan header atau path input pengguna"
+  }
+]

@@ -1,0 +1,12 @@
+Skenario,Karakteristik Kasus,Ssec,Pperf,UPRI,Kill Switch,Keputusan,Exit Code
+SC-01,"Sistem Sempurna (No Vuln, ER=0, Lat=100ms)",100.0,94.0,97.6,Tidak,PASSED,0
+SC-02,Ada 1 Temuan Low (UPRI >= 85),95.0,80.0,89.0,Tidak,PASSED,0
+SC-03,Ada 1 Temuan Medium (UPRI 70-85),85.0,80.0,83.0,Tidak,CONDITIONAL PASS,1
+SC-04,Banyak Temuan Low/Med (UPRI < 70),40.0,80.0,56.0,Tidak,REJECTED,2
+SC-05,Kill Switch: 1 Kerentanan Critical,0.0,85.0,34.0,Aktif,REJECTED,2
+SC-06,Kill Switch: 1 Kerentanan High,50.0,85.0,64.0,Aktif,REJECTED,2
+SC-07,Kill Switch: Error Rate > 0 di Typical,100.0,83.8,93.5,Aktif,REJECTED,2
+SC-08,Kill Switch: Latensi >= 500ms di Typical,100.0,61.0,84.4,Aktif,REJECTED,2
+SC-09,Stress Error Tinggi tapi Typical/Peak Bersih,85.0,85.0,85.0,Tidak,PASSED,0
+TARGET-1,Real Target: OWASP Juice Shop,0.0,79.4,31.8,Aktif (Critical SQLi/XSS),REJECTED,2
+TARGET-2,Real Target: Clean Production API,100.0,96.2,98.5,Tidak,PASSED,0
