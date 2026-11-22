@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan Kesiapan Produksi API - Run {{ metadata.run_id }}</title>
+  <style>
+    /* ==========================================================================
+       RESET & BASE TYPOGRAPHY (Standalone, Inline, No CDN)
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5;
+      color: #1e293b;
+      background-color: #f8fafc;
+      padding: 24px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* HEADER & BANNER */
+    .header {
+      padding: 24px 32px;
+      background: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .header .subtitle {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    .header-badges {
+      display: flex;
+      gap: 8px;
+    }
+    .badge-tag {
+      background: #334155;
+      color: #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* DECISION BANNER */
+    .decision-banner {
+      padding: 28px 32px;
+      text-align: center;
+      color: #ffffff;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      border-bottom: 3px solid rgba(0,0,0,0.1);
+    }
+    .decision-PASSED {
+      background: linear-gradient(135deg, #15803d, #16a34a);
+    }
+    .decision-CONDITIONAL-PASS, .decision-CONDITIONAL {
+      background: linear-gradient(135deg, #b45309, #d97706);
+    }
+    .decision-REJECTED {
+      background: linear-gradient(135deg, #b91c1c, #dc2626);
+    }
+    .decision-INCOMPLETE {
+      background: linear-gradient(135deg, #475569, #64748b);
+    }
+    .decision-title {
+      font-size: 32px;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .decision-desc {
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0.95;
+    }
+
+    /* KILL SWITCH ALERT BOX */
+    .kill-switch-alert {
+      margin: 24px 32px;
+      background-color: #fef2f2;
+      border: 2px solid #ef4444;
+      border-radius: 8px;
+      padding: 18px 24px;
+      color: #991b1b;
+    }
+    .kill-switch-title {
+      font-weight: 700;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .kill-switch-list {
+      margin-left: 20px;
+      font-size: 13px;
+    }
+    .kill-switch-list li {
+      margin-bottom: 4px;
+    }
+
+    /* CONTENT LAYOUT */
+    .content {
+      padding: 32px;
+    }
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-top: 32px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-title:first-of-type {
+      margin-top: 0;
+    }
+
+    /* STATS GRID */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    /* TABLES */
+    .table-responsive {
+      overflow-x: auto;
+      margin-bottom: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    thead {
+      background: #f1f5f9;
+      color: #475569;
+      font-weight: 600;
+    }
+    th, td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    /* SEVERITY BADGES */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-Critical { background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; }
+    .badge-High     { background: #ffedd5; color: #c2410c; border: 1px solid #fb923c; }
+    .badge-Medium   { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .badge-Low      { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+    .badge-Info     { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .badge-tool     { background: #e2e8f0; color: #1e293b; font-size: 11px; font-weight: 600; }
+    .badge-pass     { background: #dcfce7; color: #15803d; font-weight: 700; }
+    .badge-fail     { background: #fee2e2; color: #b91c1c; font-weight: 700; }
+
+    /* SIMPLE SVG / CSS BARS */
+    .bar-container {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    /* CALLOUT BOXES */
+    .callout {
+      background: #f8fafc;
+      border-left: 4px solid #3b82f6;
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+      color: #334155;
+      margin-bottom: 16px;
+    }
+    .callout-warning {
+      background: #fffbeb;
+      border-left-color: #f59e0b;
+      color: #92400e;
+    }
+
+    /* METADATA LIST */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      font-size: 12px;
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .meta-label {
+      font-weight: 600;
+      color: #64748b;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .meta-value {
+      color: #0f172a;
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    /* FOOTER */
+    .footer {
+      padding: 20px 32px;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 12px;
+      text-align: center;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    /* PRINT STYLES */
+    @media print {
+      body {
+        padding: 0;
+        background: #ffffff;
+      }
+      .container {
+        box-shadow: none;
+        border: none;
+        max-width: 100%;
+      }
+      .section-title {
+        page-break-after: avoid;
+      }
+      tr, .stat-card {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <h1>Audit Kesiapan Produksi API (Production Readiness Audit)</h1>
+      <div class="subtitle">Target: <strong>{{ metadata.target_url }}</strong> | Run ID: <code>{{ metadata.run_id }}</code></div>
+    </div>
+    <div class="header-badges">
+      <span class="badge-tag">{{ metadata.timestamp[:19].replace('T', ' ') }}</span>
+      <span class="badge-tag">Versi Framework: 1.0.0</span>
+    </div>
+  </div>
+
+  <!-- DECISION BANNER -->
+  {% set dec = scorecard.decision if scorecard else 'INCOMPLETE' %}
+  {% set dec_class = dec.replace(' ', '-') %}
+  <div class="decision-banner decision-{{ dec_class }}">
+    <div class="decision-title">{{ dec }}</div>
+    <div class="decision-desc">
+      {% if dec == 'PASSED' %}
+        Sistem memenuhi seluruh kriteria kesiapan produksi dengan UPRI &ge; 85 dan tidak memicu Kill Switch.
+      {% elif 'CONDITIONAL' in dec %}
+        Sistem diizinkan rilis bersyarat (UPRI 70–84.99). Perbaikan kerentanan minor atau peningkatan kapasitas disarankan.
+      {% elif dec == 'REJECTED' %}
+        Sistem TIDAK SIAP untuk lingkungan produksi karena melanggar batasan kritis atau skor UPRI &lt; 70.
+      {% else %}
+        Audit belum lengkap atau sebagian pengujian dilewati/gagal dievaluasi.
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- KILL SWITCH BOX -->
+  {% if scorecard and scorecard.kill_switch %}
+  <div class="kill-switch-alert">
+    <div class="kill-switch-title">
+      <span>&#9888;</span> KILL SWITCH DIPICU (Override Produksi Diberlakukan)
+    </div>
+    <ul class="kill-switch-list">
+      {% for reason in scorecard.kill_reasons %}
+        <li><strong>[!]</strong> {{ reason }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- 1. EXECUTIVE SCORECARD SUMMARY -->
+    <div class="section-title">
+      <span>1. Ringkasan Skor Kesiapan Produksi (UPRI Scorecard)</span>
+      <span style="font-size: 12px; font-weight: normal; color: #64748b;">Rumus: <code>0.6*Ssec + 0.4*Pperf</code></span>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" style="color: {% if scorecard and scorecard.upri >= 85 %}#16a34a{% elif scorecard and scorecard.upri >= 70 %}#d97706{% else %}#dc2626{% endif %};">
+          {{ "%.2f"|format(scorecard.upri) if scorecard else "N/A" }}
+        </div>
+        <div class="stat-label">UPRI Final</div>
+        <div class="stat-sub">Batas Lulus: &ge; 85.00</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">
+          {{ "%.2f"|format(scorecard.ssec) if scorecard else "N/A" }}
+        </div>
+        <div class="stat-label">Ssec (Keamanan DAST)</div>
+        <div class="stat-sub">Bobot 60% dalam UPRI</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">
+          {{ "%.2f"|format(scorecard.pperf) if scorecard else "N/A" }}
+        </div>
+        <div class="stat-label">Pperf (Performa k6)</div>
+        <div class="stat-sub">Bobot 40% dalam UPRI</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="font-size: 20px; line-height: 1.8;">
+          {% if scorecard %}
+            {{ scorecard.exit_code }} ({{ scorecard.decision }})
+          {% else %}
+            3 (INCOMPLETE)
+          {% endif %}
+        </div>
+        <div class="stat-label">Exit Code Keputusan</div>
+        <div class="stat-sub">0=Pass, 1=Cond, 2=Rej, 3=Inc</div>
+      </div>
+    </div>
+
+    <!-- 2. SECURITY FINDINGS (UNION LIST) -->
+    <div class="section-title">
+      <span>2. Audit Keamanan DAST (Union List Aggregator)</span>
+      <span style="font-size: 12px; font-weight: normal; color: #64748b;">
+        Total: {{ security.union_findings|length if security and security.union_findings else 0 }} Temuan
+      </span>
+    </div>
+
+    {% if security and security.union_findings %}
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 100px;">Severity</th>
+              <th style="width: 110px;">Tool</th>
+              <th style="width: 90px;">CWE</th>
+              <th style="width: 80px;">Method</th>
+              <th>Route</th>
+              <th>Parameter</th>
+              <th>Nama Kerentanan</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for f in security.union_findings %}
+            <tr>
+              <td><span class="badge badge-{{ f.severity }}">{{ f.severity }}</span></td>
+              <td><span class="badge badge-tool">{{ f.tool }}</span></td>
+              <td><code>{{ f.cwe or '-' }}</code></td>
+              <td><strong>{{ f.method }}</strong></td>
+              <td><code>{{ f.route }}</code></td>
+              <td>{{ f.param or '-' }}</td>
+              <td>{{ f.name }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="callout">
+        {% if security and security.status == 'SKIPPED' %}
+          Pengujian keamanan dilewati (--skip-security diaktifkan).
+        {% else %}
+          Tidak ada kerentanan DAST terdeteksi (Union List bersih).
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- 3. SECURITY METRICS EVALUATION (RECALL IMPROVEMENT) -->
+    <div class="section-title">
+      <span>3. Evaluasi Metrik Deteksi Keamanan vs Ground Truth (RQ2)</span>
+    </div>
+
+    {% if security and security.metrics and security.metrics.metrics_table %}
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Alat Pemindai</th>
+              <th>TP</th>
+              <th>FP</th>
+              <th>FN</th>
+              <th>Precision</th>
+              <th>Recall</th>
+              <th>F1-Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in security.metrics.metrics_table %}
+            <tr style="{% if 'Union' in row.Tool %}font-weight: 700; background-color: #f8fafc;{% endif %}">
+              <td>{{ row.Tool }}</td>
+              <td>{{ row.TP }}</td>
+              <td>{{ row.FP }}</td>
+              <td>{{ row.FN }}</td>
+              <td>{{ "%.2f%%"|format(row.Precision * 100) }}</td>
+              <td>{{ "%.2f%%"|format(row.Recall * 100) }}</td>
+              <td>{{ "%.2f%%"|format(row.F1 * 100) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% if security.metrics.recall_improvement %}
+      {% set rec = security.metrics.recall_improvement %}
+      <div class="callout">
+        <strong>Analisis Peningkatan Recall Union List:</strong><br>
+        - Recall Pemindai Tunggal Terbaik ({{ rec.best_single_scanner }}): <strong>{{ "%.2f%%"|format(rec.best_single_recall * 100) }}</strong><br>
+        - Recall Union List Gabungan: <strong>{{ "%.2f%%"|format(rec.union_recall * 100) }}</strong><br>
+        - Peningkatan: <strong>+{{ rec.percentage_points.vs_best_single }} pp</strong> (relatif: +{{ rec.relative_percent.vs_best_single }}%)<br>
+        - Target Proposal (&ge; 15%):
+          <span class="badge {% if rec.target_passed_relative or rec.target_passed_percentage_points %}badge-pass{% else %}badge-fail{% endif %}">
+            {% if rec.target_passed_relative or rec.target_passed_percentage_points %}PASS{% else %}FAIL{% endif %}
+          </span>
+      </div>
+      {% endif %}
+    {% else %}
+      <div class="callout">
+        Data evaluasi metrik ground truth tidak tersedia atau scanner tidak dijalankan.
+      </div>
+    {% endif %}
+
+    <!-- 4. ACTIVE DEFENSE ML-WAF -->
+    <div class="section-title">
+      <span>4. Verifikasi Active Defense ML-WAF (RQ3)</span>
+    </div>
+
+    {% if waf and waf.evaluated %}
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">{{ "%.2f%%"|format(waf.realtime_metrics.accuracy * 100) }}</div>
+          <div class="stat-label">Akurasi Real-Time</div>
+          <div class="stat-sub">Target: &ge; 90.00%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ "%.2f%%"|format(waf.realtime_metrics.fpr * 100) }}</div>
+          <div class="stat-label">False Positive Rate (FPR)</div>
+          <div class="stat-sub">Normal Request Terblokir</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ "%.2f%%"|format(waf.baseline_accuracy * 100) }}</div>
+          <div class="stat-label">Akurasi Baseline Keyword</div>
+          <div class="stat-sub">Rule-based Comparison</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">
+            {{ "%.2f%%"|format(waf.hold_out_accuracy_csic * 100) if waf.hold_out_accuracy_csic else "N/A" }}
+          </div>
+          <div class="stat-label">Hold-out CSIC Acc</div>
+          <div class="stat-sub">CRISP-DM Validation</div>
+        </div>
+      </div>
+
+      {% if waf_cm_b64 %}
+      <div style="text-align: center; margin: 16px 0;">
+        <img src="data:image/png;base64,{{ waf_cm_b64 }}" alt="Confusion Matrix WAF" style="max-width: 450px; border-radius: 8px; border: 1px solid #e2e8f0;">
+      </div>
+      {% endif %}
+    {% else %}
+      <div class="callout">
+        Pengujian Active Defense ML-WAF tidak dijalankan atau dilewati.
+      </div>
+    {% endif %}
+
+    <!-- 5. PERFORMANCE DRIVER (k6) -->
+    <div class="section-title">
+      <span>5. Uji Beban &amp; Ketahanan Sistem k6 (RQ4)</span>
+      <span style="font-size: 12px; font-weight: normal; color: #64748b;">
+        Aggregate Pperf: <strong>{{ "%.2f"|format(performance.aggregate_pperf) if performance and performance.aggregate_pperf else "N/A" }}</strong>
+      </span>
+    </div>
+
+    {% if performance and performance.profiles %}
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Profil Beban</th>
+              <th>VUs</th>
+              <th>RPS</th>
+              <th>Avg Latency</th>
+              <th>P95 Latency</th>
+              <th>P99 Latency</th>
+              <th>Error Rate</th>
+              <th>CPU Peak</th>
+              <th>Mem Peak</th>
+              <th>Pperf</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p_name, p in performance.profiles.items() %}
+            <tr>
+              <td><strong>{{ p_name.upper() }}</strong></td>
+              <td>{{ p.target_vus or '-' }}</td>
+              <td>{{ "%.1f"|format(p.rps or 0) }}</td>
+              <td>
+                {{ "%.1f ms"|format(p.latency_avg_ms or 0) }}
+                <div class="bar-container">
+                  <div class="bar-fill" style="width: {{ [((p.latency_avg_ms or 0) / 500.0 * 100), 100]|min }}%; background: {% if (p.latency_avg_ms or 0) >= 500 %}#dc2626{% elif (p.latency_avg_ms or 0) >= 200 %}#f59e0b{% else %}#10b981{% endif %};"></div>
+                </div>
+              </td>
+              <td>{{ "%.1f ms"|format(p.latency_p95_ms or 0) }}</td>
+              <td>{{ "%.1f ms"|format(p.latency_p99_ms or 0) }}</td>
+              <td>
+                <span style="color: {% if (p.error_rate or 0) > 0 %}#dc2626; font-weight: 700;{% else %}#16a34a;{% endif %}">
+                  {{ "%.2f%%"|format((p.error_rate or 0) * 100) }}
+                </span>
+              </td>
+              <td>{{ "%.1f%%"|format(p.cpu_pct_peak or 0) }}</td>
+              <td>{{ "%.1f%%"|format(p.mem_pct_peak or 0) }}</td>
+              <td><strong>{{ "%.2f"|format(p.pperf or 0) }}</strong></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="callout">
+        Data pengujian performa k6 tidak tersedia atau dilewati.
+      </div>
+    {% endif %}
+
+    <!-- 6. FUNCTIONAL TEST RESULTS -->
+    <div class="section-title">
+      <span>6. Uji Fungsional &amp; Validasi Skema (RQ1)</span>
+      <span style="font-size: 12px; font-weight: normal; color: #64748b;">
+        Pass Rate: <strong>{{ "%.1f%%"|format((functional.pass_rate or 0) * 100) if functional else "N/A" }}</strong>
+      </span>
+    </div>
+
+    {% if functional and functional.test_cases %}
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">{{ functional.total }}</div>
+          <div class="stat-label">Total Test Cases</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color: #16a34a;">{{ functional.passed }}</div>
+          <div class="stat-label">Passed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color: {% if functional.failed > 0 %}#dc2626{% else %}#16a34a{% endif %};">
+            {{ functional.failed }}
+          </div>
+          <div class="stat-label">Failed</div>
+        </div>
+      </div>
+    {% else %}
+      <div class="callout">
+        Uji fungsional tidak dijalankan atau dilewati.
+      </div>
+    {% endif %}
+
+    <!-- 7. ENVIRONMENT METADATA -->
+    <div class="section-title">
+      <span>7. Metadata Lingkungan Audit &amp; Reproduksibilitas</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <span class="meta-label">Sistem Operasi</span>
+        <span class="meta-value">{{ metadata.env.os or 'N/A' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Prosesor (CPU)</span>
+        <span class="meta-value">{{ metadata.env.cpu or 'N/A' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Memori RAM</span>
+        <span class="meta-value">{{ metadata.env.ram or 'N/A' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Python Version</span>
+        <span class="meta-value">{{ metadata.env.python or 'N/A' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Versi k6</span>
+        <span class="meta-value">{{ metadata.env.k6_version or 'N/A' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Versi mitmproxy</span>
+        <span class="meta-value">{{ metadata.env.mitmproxy_version or 'N/A' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Total Durasi Audit</span>
+        <span class="meta-value">{{ "%.1f detik"|format(metadata.duration_seconds or 0) }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Scanner Kedua</span>
+        <span class="meta-value">{{ metadata.scanner2 or 'nuclei' }}</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Laporan ini dibuat secara otomatis oleh <strong>audit-cli</strong> Framework Audit Kesiapan Produksi API.<br>
+    Format output: JSON (<code>report.json</code>), CSV (<code>report.csv</code>), HTML (<code>report.html</code>).
+  </div>
+
+</div>
+
+</body>
+</html>

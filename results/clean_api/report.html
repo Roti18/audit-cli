@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan Kesiapan Produksi API - Run clean_api</title>
+  <style>
+    /* ==========================================================================
+       RESET & BASE TYPOGRAPHY (Standalone, Inline, No CDN)
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5;
+      color: #1e293b;
+      background-color: #f8fafc;
+      padding: 24px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* HEADER & BANNER */
+    .header {
+      padding: 24px 32px;
+      background: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .header .subtitle {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    .header-badges {
+      display: flex;
+      gap: 8px;
+    }
+    .badge-tag {
+      background: #334155;
+      color: #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* DECISION BANNER */
+    .decision-banner {
+      padding: 28px 32px;
+      text-align: center;
+      color: #ffffff;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      border-bottom: 3px solid rgba(0,0,0,0.1);
+    }
+    .decision-PASSED {
+      background: linear-gradient(135deg, #15803d, #16a34a);
+    }
+    .decision-CONDITIONAL-PASS, .decision-CONDITIONAL {
+      background: linear-gradient(135deg, #b45309, #d97706);
+    }
+    .decision-REJECTED {
+      background: linear-gradient(135deg, #b91c1c, #dc2626);
+    }
+    .decision-INCOMPLETE {
+      background: linear-gradient(135deg, #475569, #64748b);
+    }
+    .decision-title {
+      font-size: 32px;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .decision-desc {
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0.95;
+    }
+
+    /* KILL SWITCH ALERT BOX */
+    .kill-switch-alert {
+      margin: 24px 32px;
+      background-color: #fef2f2;
+      border: 2px solid #ef4444;
+      border-radius: 8px;
+      padding: 18px 24px;
+      color: #991b1b;
+    }
+    .kill-switch-title {
+      font-weight: 700;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .kill-switch-list {
+      margin-left: 20px;
+      font-size: 13px;
+    }
+    .kill-switch-list li {
+      margin-bottom: 4px;
+    }
+
+    /* CONTENT LAYOUT */
+    .content {
+      padding: 32px;
+    }
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-top: 32px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-title:first-of-type {
+      margin-top: 0;
+    }
+
+    /* STATS GRID */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    /* TABLES */
+    .table-responsive {
+      overflow-x: auto;
+      margin-bottom: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    thead {
+      background: #f1f5f9;
+      color: #475569;
+      font-weight: 600;
+    }
+    th, td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    /* SEVERITY BADGES */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-Critical { background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; }
+    .badge-High     { background: #ffedd5; color: #c2410c; border: 1px solid #fb923c; }
+    .badge-Medium   { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .badge-Low      { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+    .badge-Info     { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .badge-tool     { background: #e2e8f0; color: #1e293b; font-size: 11px; font-weight: 600; }
+    .badge-pass     { background: #dcfce7; color: #15803d; font-weight: 700; }
+    .badge-fail     { background: #fee2e2; color: #b91c1c; font-weight: 700; }
+
+    /* SIMPLE SVG / CSS BARS */
+    .bar-container {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    /* CALLOUT BOXES */
+    .callout {
+      background: #f8fafc;
+      border-left: 4px solid #3b82f6;
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+      color: #334155;
+      margin-bottom: 16px;
+    }
+    .callout-warning {
+      background: #fffbeb;
+      border-left-color: #f59e0b;
+      color: #92400e;
+    }
+
+    /* METADATA LIST */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      font-size: 12px;
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .meta-label {
+      font-weight: 600;
+      color: #64748b;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .meta-value {
+      color: #0f172a;
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    /* FOOTER */
+    .footer {
+      padding: 20px 32px;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 12px;
+      text-align: center;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    /* PRINT STYLES */
+    @media print {
+      body {
+        padding: 0;
+        background: #ffffff;
+      }
+      .container {
+        box-shadow: none;
+        border: none;
+        max-width: 100%;
+      }
+      .section-title {
+        page-break-after: avoid;
+      }
+      tr, .stat-card {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <h1>Audit Kesiapan Produksi API (Production Readiness Audit)</h1>
+      <div class="subtitle">Target: <strong>http://localhost:5000</strong> | Run ID: <code>clean_api</code></div>
+    </div>
+    <div class="header-badges">
+      <span class="badge-tag">2026-11-22 21:51:29</span>
+      <span class="badge-tag">Versi Framework: 1.0.0</span>
+    </div>
+  </div>
+
+  <!-- DECISION BANNER -->
+  
+  
+  <div class="decision-banner decision-PASSED">
+    <div class="decision-title">PASSED</div>
+    <div class="decision-desc">
+      
+        Sistem memenuhi seluruh kriteria kesiapan produksi dengan UPRI &ge; 85 dan tidak memicu Kill Switch.
+      
+    </div>
+  </div>
+
+  <!-- KILL SWITCH BOX -->
+  
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- 1. EXECUTIVE SCORECARD SUMMARY -->
+    <div class="section-title">
+      <span>1. Ringkasan Skor Kesiapan Produksi (UPRI Scorecard)</span>
+      <span style="font-size: 12px; font-weight: normal; color: #64748b;">Rumus: <code>0.6*Ssec + 0.4*Pperf</code></span>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" style="color: #16a34a;">
+          94.41
+        </div>
+        <div class="stat-label">UPRI Final</div>
+        <div class="stat-sub">Batas Lulus: &ge; 85.00</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">
+          100.00
+        </div>
+        <div class="stat-label">Ssec (Keamanan DAST)</div>
+        <div class="stat-sub">Bobot 60% dalam UPRI</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">
+          86.03
+        </div>
+        <div class="stat-label">Pperf (Performa k6)</div>
+        <div class="stat-sub">Bobot 40% dalam UPRI</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="font-size: 20px; line-height: 1.8;">
+          
+            0 (PASSED)
+          
+        </div>
+        <div class="stat-label">Exit Code Keputusan</div>
+        <div class="stat-sub">0=Pass, 1=Cond, 2=Rej, 3=Inc</div>
+      </div>
+    </div>
+
+    <!-- 2. SECURITY FINDINGS (UNION LIST) -->
+    <div class="section-title">
+      <span>2. Audit Keamanan DAST (Union List Aggregator)</span>
+      <span style="font-size: 12px; font-weight: normal; color: #64748b;">
+        Total: 0 Temuan
+      </span>
+    </div>
+
+    
+      <div class="callout">
+        
+          Tidak ada kerentanan DAST terdeteksi (Union List bersih).
+        
+      </div>
+    
+
+    <!-- 3. SECURITY METRICS EVALUATION (RECALL IMPROVEMENT) -->
+    <div class="section-title">
+      <span>3. Evaluasi Metrik Deteksi Keamanan vs Ground Truth (RQ2)</span>
+    </div>
+
+    
+      <div class="callout">
+        Data evaluasi metrik ground truth tidak tersedia atau scanner tidak dijalankan.
+      </div>
+    
+
+    <!-- 4. ACTIVE DEFENSE ML-WAF -->
+    <div class="section-title">
+      <span>4. Verifikasi Active Defense ML-WAF (RQ3)</span>
+    </div>
+
+    
+      <div class="callout">
+        Pengujian Active Defense ML-WAF tidak dijalankan atau dilewati.
+      </div>
+    
+
+    <!-- 5. PERFORMANCE DRIVER (k6) -->
+    <div class="section-title">
+      <span>5. Uji Beban &amp; Ketahanan Sistem k6 (RQ4)</span>
+      <span style="font-size: 12px; font-weight: normal; color: #64748b;">
+        Aggregate Pperf: <strong>86.03</strong>
+      </span>
+    </div>
+
+    
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Profil Beban</th>
+              <th>VUs</th>
+              <th>RPS</th>
+              <th>Avg Latency</th>
+              <th>P95 Latency</th>
+              <th>P99 Latency</th>
+              <th>Error Rate</th>
+              <th>CPU Peak</th>
+              <th>Mem Peak</th>
+              <th>Pperf</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td><strong>TYPICAL</strong></td>
+              <td>10</td>
+              <td>96.5</td>
+              <td>
+                2.1 ms
+                <div class="bar-container">
+                  <div class="bar-fill" style="width: 0.424%; background: #10b981;"></div>
+                </div>
+              </td>
+              <td>3.8 ms</td>
+              <td>5.9 ms</td>
+              <td>
+                <span style="color: #16a34a;">
+                  0.00%
+                </span>
+              </td>
+              <td>28.4%</td>
+              <td>68.9%</td>
+              <td><strong>86.09</strong></td>
+            </tr>
+            
+            <tr>
+              <td><strong>PEAK</strong></td>
+              <td>50</td>
+              <td>480.9</td>
+              <td>
+                2.7 ms
+                <div class="bar-container">
+                  <div class="bar-fill" style="width: 0.548%; background: #10b981;"></div>
+                </div>
+              </td>
+              <td>7.2 ms</td>
+              <td>22.5 ms</td>
+              <td>
+                <span style="color: #16a34a;">
+                  0.00%
+                </span>
+              </td>
+              <td>29.8%</td>
+              <td>69.1%</td>
+              <td><strong>86.02</strong></td>
+            </tr>
+            
+            <tr>
+              <td><strong>STRESS</strong></td>
+              <td>100</td>
+              <td>953.8</td>
+              <td>
+                2.8 ms
+                <div class="bar-container">
+                  <div class="bar-fill" style="width: 0.5539999999999999%; background: #10b981;"></div>
+                </div>
+              </td>
+              <td>29.4 ms</td>
+              <td>53.0 ms</td>
+              <td>
+                <span style="color: #16a34a;">
+                  0.00%
+                </span>
+              </td>
+              <td>34.3%</td>
+              <td>69.3%</td>
+              <td><strong>85.98</strong></td>
+            </tr>
+            
+            <tr>
+              <td><strong>SPIKE</strong></td>
+              <td>100</td>
+              <td>872.0</td>
+              <td>
+                0.0 ms
+                <div class="bar-container">
+                  <div class="bar-fill" style="width: 0.0%; background: #10b981;"></div>
+                </div>
+              </td>
+              <td>0.0 ms</td>
+              <td>0.0 ms</td>
+              <td>
+                <span style="color: #16a34a;">
+                  0.00%
+                </span>
+              </td>
+              <td>100.0%</td>
+              <td>69.5%</td>
+              <td><strong>80.00</strong></td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    
+
+    <!-- 6. FUNCTIONAL TEST RESULTS -->
+    <div class="section-title">
+      <span>6. Uji Fungsional &amp; Validasi Skema (RQ1)</span>
+      <span style="font-size: 12px; font-weight: normal; color: #64748b;">
+        Pass Rate: <strong>93.3%</strong>
+      </span>
+    </div>
+
+    
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">15</div>
+          <div class="stat-label">Total Test Cases</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color: #16a34a;">14</div>
+          <div class="stat-label">Passed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color: #dc2626;">
+            1
+          </div>
+          <div class="stat-label">Failed</div>
+        </div>
+      </div>
+    
+
+    <!-- 7. ENVIRONMENT METADATA -->
+    <div class="section-title">
+      <span>7. Metadata Lingkungan Audit &amp; Reproduksibilitas</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <span class="meta-label">Sistem Operasi</span>
+        <span class="meta-value">Windows-11-10.0.26200-SP0</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Prosesor (CPU)</span>
+        <span class="meta-value">Intel64 Family 6 Model 186 Stepping 2, GenuineIntel (12 Logical Cores)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Memori RAM</span>
+        <span class="meta-value">15.71 GB</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Python Version</span>
+        <span class="meta-value">3.14.7</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Versi k6</span>
+        <span class="meta-value">k6.EXE v1.5.0 (commit/7961cefa12, go1.25.5, windows/amd64)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Versi mitmproxy</span>
+        <span class="meta-value">Mitmproxy: 12.3.1</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Total Durasi Audit</span>
+        <span class="meta-value">122.1 detik</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Scanner Kedua</span>
+        <span class="meta-value">arachni</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Laporan ini dibuat secara otomatis oleh <strong>audit-cli</strong> Framework Audit Kesiapan Produksi API.<br>
+    Format output: JSON (<code>report.json</code>), CSV (<code>report.csv</code>), HTML (<code>report.html</code>).
+  </div>
+
+</div>
+
+</body>
+</html>

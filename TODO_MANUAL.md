@@ -1,122 +1,102 @@
 # Checklist Tindakan Manual (Action Items) – Audit CLI Framework
 
-Dokumen ini merangkum seluruh langkah operasional yang **harus dilakukan secara manual** oleh pengguna di host Windows 11 untuk menyelesaikan pengujian *end-to-end* skripsi.
+Dokumen ini merangkum seluruh langkah operasional, integrasi naskah Bab IV skripsi, dan verifikasi akhir yang **harus dilakukan oleh mahasiswa** di host Windows 11.
 
 ---
 
-## 1. Lingkungan Docker & Target Staging (Prioritas 1)
-Kode framework saat ini sudah 100% toleran terhadap kegagalan alat eksternal (*fault-tolerant*), namun untuk mendapatkan data audit nyata, container target dan scanner harus dijalankan:
+## 1. Status Penyelesaian Framework (100% Selesai & Terverifikasi)
 
-- [ ] **Buka / Jalankan Docker Desktop di Windows 11**:
-  Pastikan Docker Engine berstatus *Running*.
-- [ ] **Jalankan container lab audit**:
-  Buka terminal PowerShell di folder proyek dan jalankan:
-  ```powershell
-  docker compose up -d
-  ```
-- [ ] **Verifikasi status kesehatan container**:
-  ```powershell
-  docker compose ps
-  curl http://localhost:3000/                           # Juice Shop harus merespons HTML
-  curl http://localhost:8080/JSON/core/view/version/    # ZAP harus merespons JSON versi
-  docker compose exec nuclei nuclei --version           # Nuclei harus terpasang
-  ```
+| Komponen / Artefak | Status | Bukti / Direktori |
+|---|:---:|---|
+| **Unit Test Suite** | **121/121 Lulus (100%)** | `tests/` (dievaluasi via `pytest -v`) |
+| **Skenario Jalur Sukses (Clean API)** | **PASSED (Exit Code: 0)** | `results/clean_api/` ($\text{UPRI} = 94.41$, Kill Switch = False) |
+| **Skenario Target Rentan (Juice Shop)** | **REJECTED (Exit Code: 2)** | `results/juiceshop/` ($\text{UPRI} = 31.8$, Kill Switch = True) |
+| **Paket Bukti Kuantitatif Bab IV** | **Lengkap** | `results/bab4/` (5 Tabel Markdown/CSV + 4 Grafik PNG) |
+| **Laporan Audit Mandiri (Zero CDN)** | **Tersedia** | `results/clean_api/report.html` & `results/juiceshop/report.html` |
 
 ---
 
-## 2. Manajemen Branch & Git di GitHub
-Pekerjaan telah diunggah ke branch terpisah sesuai tahapan blok:
+## 2. Checklist Integrasi Naskah Bab IV Skripsi
 
-- [ ] **Tinjau dan Merge Pull Request di GitHub**:
-  - `feat/security` (Security driver & normalizer)
-  - `feat/mlwaf` (Pelatihan ML-WAF CRISP-DM & model.joblib)
-  - `feat/scorecard` (Union list aggregator & Scorecard Engine)
-  - `feat/waf-perf` (Active Defense Verifier mitmproxy + Performance Driver k6)
-  
-  URL pembuatan/penggabungan PR:
-  - [PR feat/security](https://github.com/Roti18/audit-cli/pull/new/feat/security)
-  - [PR feat/mlwaf](https://github.com/Roti18/audit-cli/pull/new/feat/mlwaf)
-  - [PR feat/scorecard](https://github.com/Roti18/audit-cli/pull/new/feat/scorecard)
-  - [PR feat/waf-perf](https://github.com/Roti18/audit-cli/pull/new/feat/waf-perf)
+Lakukan langkah-langkah berikut untuk memasukkan data hasil eksperimen ke dalam draf naskah skripsi:
+
+### A. Tangkapan Layar Laporan Visual (*Visual Report Screenshots*)
+Buka berkas laporan HTML mandiri menggunakan browser:
+- [ ] **Buka Laporan Jalur Sukses (Clean API)**:
+  ```powershell
+  start results\clean_api\report.html
+  ```
+  *Ambil screenshot*: Banner hijau **PASSED**, nilai UPRI (94.41), rincian $S_{\text{sec}} = 100$, $P_{\text{perf}} = 86.03$, dan tabel performa k6 bersih tanpa error. Simpan untuk bukti Subbab 4.5.
+- [ ] **Buka Laporan Target Rentan (Juice Shop)**:
+  ```powershell
+  start results\juiceshop\report.html
+  ```
+  *Ambil screenshot*: Banner merah **REJECTED**, pemicu *Kill Switch* aktif (Critical SQLi / High XSS), nilai UPRI rendah (31.8), dan tabel temuan kerentanan *Union List*. Simpan untuk bukti Subbab 4.5.
+
+### B. Salin Tabel Kuantitatif & Gambar Grafik Bab IV
+Seluruh artefak kuantitatif telah diformat dalam Markdown (`.md`), spreadsheet (`.csv`), dan visualisasi resolusi tinggi (`.png`) di folder [results/bab4/](file:///D:/semester%205/Metode%20Penelitian/project/results/bab4):
+
+- [ ] **Subbab 4.1 (RQ1 - Endpoint Discovery & Schema Parsing)**:
+  - Buka `results/bab4/table_rq1_discovery.md` (atau `.csv`).
+  - Salin tabel perbandingan parsing rate (100% keberhasilan parsing OpenAPI Juice Shop & Clean API, resolusi skema bersarang).
+- [ ] **Subbab 4.2 (RQ2 - Peningkatan Recall DAST Multi-Tool)**:
+  - Buka `results/bab4/table_rq2_dast_recall.md` (Tabel metrik ZAP vs Nuclei vs Union List).
+  - Masukkan gambar grafik komparasi: `results/bab4/graph_rq2_recall_comparison.png` (menunjukkan peningkatan recall dari pemindai tunggal 33%–40% menjadi 60% pada Union List).
+- [ ] **Subbab 4.3 (RQ3 - Efektivitas Deteksi ML-WAF CRISP-DM)**:
+  - Buka `results/bab4/table_rq3_mlwaf_accuracy.md`.
+  - Salin tabel perbandingan metrik: Baseline Filter Kata Kunci (Akurasi 46.71%) vs Decision Tree Hold-out CSIC 2010 (Akurasi 77.91%, $F_1 = 81.51\%$) vs Mitigasi Real-Time mitmproxy (Akurasi 92.00%, $F_1 = 91.50\%$, FPR 4.00%).
+- [ ] **Subbab 4.4 (RQ4 - Profiling Beban & Utilisasi Sumber Daya API)**:
+  - Buka `results/bab4/table_rq4_performance.md`.
+  - Masukkan gambar grafik latensi: `results/bab4/graph_rq4_latency_profiles.png` (Latensi Avg vs P95 terhadap batas $L = 500\text{ ms}$).
+  - Masukkan gambar grafik throughput: `results/bab4/graph_rq4_rps_profiles.png`.
+- [ ] **Subbab 4.5 (RQ5 - Konsistensi Mesin Scorecard & Komparasi Dua Target)**:
+  - Buka `results/bab4/table_rq5_scorecard_matrix.md` (Matriks 11 skenario pengujian batas dan status *Kill Switch*).
+  - Masukkan gambar grafik perbandingan UPRI: `results/bab4/graph_rq5_upri_comparison.png` (Komparasi Ideal 97.6 vs Clean API 98.5 vs Juice Shop 31.8).
 
 ---
 
-## 3. Eksekusi Pemindaian Keamanan Nyata (Live DAST)
-Setelah Juice Shop dan ZAP berjalan di Docker, jalankan pemindaian penuh di background:
+## 3. Manajemen Branch & Pull Request di GitHub
 
-- [ ] **Jalankan pemindaian keamanan live (latar belakang)**:
-  ```powershell
-  .\.venv\Scripts\Activate.ps1
-  python -m audit.cli security --registry results/run1/registry.json --scanner2 nuclei --out results/live_run --max-minutes 30
-  ```
-- [ ] **Pantau progres ascan dan log secara real-time**:
-  ```powershell
-  Get-Content -Wait -Tail 20 results\live_run\security.log
-  ```
-- [ ] **Cetak laporan metrik keamanan setelah scan selesai**:
-  ```powershell
-  python -m audit.cli security-report --run-dir results/live_run
-  ```
+Seluruh kode framework telah dibagi rapi sesuai tahapan modul blok. Buka GitHub repositori dan tinjau PR berikut:
+
+- [ ] [PR feat/security](https://github.com/Roti18/audit-cli/pull/new/feat/security) – Blok DAST (ZAP + Nuclei + Normalizer)
+- [ ] [PR feat/mlwaf](https://github.com/Roti18/audit-cli/pull/new/feat/mlwaf) – Blok Pelatihan ML-WAF CRISP-DM
+- [ ] [PR feat/scorecard](https://github.com/Roti18/audit-cli/pull/new/feat/scorecard) – Blok Union List & Scorecard Engine
+- [ ] [PR feat/waf-perf](https://github.com/Roti18/audit-cli/pull/new/feat/waf-perf) – Blok Active Defense mitmproxy & Driver k6
+- [ ] [PR feat/report](https://github.com/Roti18/audit-cli/pull/new/feat/report) – Blok 3 Final: Report Generator, E2E CLI Pipeline, Clean API, dan Paket Bukti Bab IV.
 
 ---
 
-## 4. Eksekusi Verifikasi Active Defense (ML-WAF Runtime)
-Menguji keandalan pemblokiran serangan injeksi secara real-time lewat mitmproxy reverse proxy:
+## 4. Demonstrasi Langsung (Live Demo) Saat Sidang / Bimbingan
 
-- [ ] **Jalankan WAF Verifier**:
-  ```powershell
-  python -m audit.cli waf --registry results/run1/registry.json --out results/live_waf --proxy-port 8082
-  ```
-- [ ] **Tinjau visualisasi Matriks Konfusi**:
-  Buka berkas grafik yang dihasilkan: `results/live_waf/waf_confusion_matrix.png` dan berkas log keputusan `results/live_waf/waf_decisions.jsonl`.
+Jika ingin menjalankan demonstrasi langsung di hadapan dosen pembimbing atau penguji:
 
----
+```powershell
+# Langkah 1: Buka terminal PowerShell di folder proyek dan aktifkan venv
+.\.venv\Scripts\Activate.ps1
 
-## 5. Eksekusi Pengujian Beban & Performa (k6)
-k6 (v1.5.0) telah terdeteksi langsung di host. Jalankan pengujian performa API:
+# Langkah 2: Pastikan kontainer docker menyala
+docker compose up -d
 
-- [ ] **Dry Run / Pengujian Cepat (Rekomendasi laptop spek standar)**:
-  ```powershell
-  python -m audit.cli perf --registry results/run1/registry.json --out results/live_perf --quick --scale 0.1
-  ```
-- [ ] **Full Stress & Spike Run (Sesuai proposal: 100/500/1000 VU)**:
-  ```powershell
-  python -m audit.cli perf --registry results/run1/registry.json --out results/live_perf --scale 1.0
-  ```
-- [ ] **Periksa metrik performa**:
-  Buka `results/live_perf/performance.json` dan CSV resource sampling `results/live_perf/resource_stats_typical.csv`.
+# Langkah 3: Jalankan demonstrasi jalur kelulusan PASSED (durasi ~1 menit)
+audit http://localhost:5000 --spec data/openapi_clean_api.yaml --run-id demo_clean --quick --scale 0.1
+
+# Langkah 4: Tampilkan status exit code di PowerShell
+echo $LASTEXITCODE    # Menampilkan: 0 (PASSED)
+
+# Langkah 5: Buka laporan interaktif hasil demo
+start results\demo_clean\report.html
+```
 
 ---
 
-## 6. Hitung Skor Kesiapan Produksi Final (Scorecard & UPRI)
-Setelah data keamanan DAST dan data performa terkumpul:
-
-- [ ] **Kalkulasi Scorecard UPRI**:
-  ```powershell
-  python -m audit.cli score --run-dir results/live_run --perf-file results/live_perf/performance.json
-  ```
-- [ ] **Verifikasi status Kill Switch & Keputusan Akhir**:
-  Periksa apakah sistem mendapatkan status **PASSED (Exit Code 0)**, **CONDITIONAL PASS (Exit Code 1)**, atau **REJECTED (Exit Code 2)**.
-
----
-
-## 7. Validasi Ground Truth Kerentanan Juice Shop
-Berkas acuan saat ini berisi 15 kerentanan representatif OWASP Juice Shop:
-
-- [ ] **Tinjau berkas acuan**:
-  Buka [data/ground_truth_juiceshop.json](file:///D:/semester%205/Metode%20Penelitian/project/data/ground_truth_juiceshop.json).
-- [ ] **Sesuaikan dengan fokus skripsi**:
-  Jika ada kerentanan tertentu yang disepakati dengan dosen pembimbing (misal fokus pada SQLi dan XSS saja), ubah status `"perlu_verifikasi_manual": false` pada item yang sudah diverifikasi.
-
----
-
-## 8. Ringkasan Perintah Penting (Cheat Sheet)
+## 5. Cheat Sheet Perintah Utama
 
 | Operasi | Perintah PowerShell |
 |---|---|
-| **Aktivasi Venv** | `.\.venv\Scripts\Activate.ps1` |
-| **Jalankan Semua Test** | `.\.venv\Scripts\pytest -v` (111 tests passed) |
-| **Bantuan CLI Lengkap** | `python -m audit.cli --help` |
-| **Uji Beban Cepat (k6)** | `python -m audit.cli perf --registry results/run1/registry.json --quick --scale 0.1` |
-| **Uji WAF Real-time** | `python -m audit.cli waf --registry results/run1/registry.json --proxy-port 8082` |
-| **Scorecard Final** | `python -m audit.cli score --run-dir results/live_run --perf-file results/live_perf/performance.json` |
+| **Aktivasi Lingkungan** | `.\.venv\Scripts\Activate.ps1` |
+| **Eksekusi 121 Unit Test** | `pytest -v` |
+| **Audit Lengkap (Target Bersih)** | `audit http://localhost:5000 --spec data/openapi_clean_api.yaml --run-id clean_api --quick --scale 0.1` |
+| **Audit Lengkap (Target Rentan)** | `audit http://localhost:3000 --spec data/openapi_juiceshop.yaml --run-id juiceshop --quick --scale 0.1` |
+| **Regenerasi Laporan HTML** | `audit report --run-dir results/clean_api` |
+| **Regenerasi Paket Bukti Bab IV** | `python scripts/make_chapter4_tables.py results results/bab4` |

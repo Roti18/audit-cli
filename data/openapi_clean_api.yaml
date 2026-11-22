@@ -1,0 +1,92 @@
+openapi: 3.0.3
+info:
+  title: Clean Production API
+  version: 1.0.0
+  description: Mock API aman dan patuh standar produksi untuk verifikasi jalur PASSED pada audit kesiapan produksi.
+servers:
+  - url: http://localhost:5000
+paths:
+  /health:
+    get:
+      summary: Healthcheck
+      responses:
+        '200':
+          description: Service sehat
+  /api/v1/items:
+    get:
+      summary: Daftar item
+      responses:
+        '200':
+          description: Daftar item
+    post:
+      summary: Tambah item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - price
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: integer
+      responses:
+        '201':
+          description: Item berhasil dibuat
+        '400':
+          description: Input tidak valid
+  /api/v1/items/{id}:
+    get:
+      summary: Detail item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail item
+        '400':
+          description: ID bukan integer
+        '404':
+          description: Item tidak ditemukan
+  /api/v1/search:
+    get:
+      summary: Pencarian item
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Hasil pencarian
+  /api/v1/secure-data:
+    get:
+      summary: Data rahasia terproteksi token
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Data rahasia
+        '401':
+          description: Unauthorized
+  /api/v1/status:
+    get:
+      summary: Status sistem
+      responses:
+        '200':
+          description: Status sistem
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
