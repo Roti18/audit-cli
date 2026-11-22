@@ -85,7 +85,52 @@ def functional(
 
 
 # ---------------------------------------------------------------------------
-# run (full pipeline – stub untuk Blok 2+)
+# security
+# ---------------------------------------------------------------------------
+@app.command()
+def security(
+    registry_path: str = typer.Option(
+        "results/default/registry.json", "--registry",
+        help="Path ke registry.json",
+    ),
+    scanner2: str = typer.Option("nuclei", "--scanner2", help="Scanner kedua: arachni|nuclei"),
+    out: str = typer.Option("results/default", "--out", help="Direktori output"),
+    max_minutes: int = typer.Option(30, "--max-minutes", help="Batas waktu pemindaian per scanner (menit)"),
+    zap_url: str = typer.Option("http://localhost:8080", "--zap-url", help="URL ZAP daemon API"),
+    api_key: str = typer.Option("changeme", "--api-key", help="API key ZAP"),
+    allow_remote: bool = typer.Option(False, "--allow-remote", help="Izinkan target non-lokal"),
+    parallel: bool = typer.Option(True, "--parallel/--no-parallel", help="Jalankan scanner secara paralel"),
+) -> None:
+    """Jalankan security driver (OWASP ZAP + scanner kedua) terhadap registry."""
+    from audit.drivers.security import run_security
+
+    reg = load_json(Registry, registry_path)
+    _ensure_local(reg.target_url, allow_remote)
+
+    out_path = Path(out)
+    out_path.mkdir(parents=True, exist_ok=True)
+
+    typer.echo(f"[security] Memulai audit keamanan untuk {reg.target_url}...")
+    typer.echo(f"[security] Output & log ditulis ke: {out_path}")
+
+    summary = run_security(
+        registry=reg,
+        run_dir=out_path,
+        scanner2=scanner2,
+        parallel=parallel,
+        max_minutes=max_minutes,
+        api_key=api_key,
+        zap_url=zap_url,
+    )
+
+    typer.echo(f"[security] Selesai!")
+    typer.echo(f"  ZAP findings: {summary['zap_findings_count']}")
+    typer.echo(f"  Scanner2 ({scanner2}) findings: {summary['scanner2_findings_count']}")
+    typer.echo(f"  Detail log tersimpan di: {out_path / 'security.log'}")
+
+
+# ---------------------------------------------------------------------------
+# run (full pipeline)
 # ---------------------------------------------------------------------------
 @app.command()
 def run(
@@ -114,8 +159,20 @@ def run(
     func_result = run_functional(registry, run_id=run_id, out_dir=out_dir)
 
     typer.echo(f"\n[run] Functional: {func_result.passed}/{func_result.total} passed")
+
+    # Step 3: Security
+    from audit.drivers.security import run_security
+    typer.echo(f"\n[run] Menjalankan Security Driver (ZAP + {scanner2})...")
+    sec_summary = run_security(
+        registry=registry,
+        run_dir=out_dir,
+        scanner2=scanner2,
+        parallel=True,
+        max_minutes=5,
+    )
+    typer.echo(f"[run] Security: ZAP={sec_summary['zap_findings_count']} findings, {scanner2}={sec_summary['scanner2_findings_count']} findings")
     typer.echo(f"[run] Output dir: {out_dir}")
-    typer.echo("[run] Security & performance drivers akan tersedia di Blok 2+.")
+    typer.echo("[run] Performance driver & Scorecard akan tersedia di Blok 3+.")
 
 
 def datetime_id() -> str:
