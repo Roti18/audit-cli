@@ -146,6 +146,137 @@ def train_waf_command(
 
 
 # ---------------------------------------------------------------------------
+# security-report
+# ---------------------------------------------------------------------------
+@app.command(name="security-report")
+def security_report_command(
+    run_dir: str = typer.Option("results/run1", "--run-dir", help="Direktori hasil audit"),
+    ground_truth: str = typer.Option("data/ground_truth_juiceshop.json", "--ground-truth", help="Path ke ground truth JSON"),
+    scanner2: str = typer.Option("nuclei", "--scanner2", help="Nama scanner kedua (arachni|nuclei)"),
+    match_param: bool = typer.Option(False, "--match-param", help="Cocokkan juga nama parameter secara persis"),
+) -> None:
+    """Buat Union List dan cetak evaluasi metrik (Precision, Recall, F1) vs Ground Truth."""
+    import json
+    from audit.schemas import Finding
+    from audit.security.metrics import compute_security_metrics
+    from audit.security.union import save_union, union_findings
+
+    p_run = Path(run_dir)
+    zap_file = p_run / "findings_zap.json"
+    s2_file = p_run / "findings_scanner2.json"
+    union_file = p_run / "union.json"
+
+    zap_findings = [Finding.model_validate(f) for f in json.loads(zap_file.read_text(encoding="utf-8"))] if zap_file.exists() else []
+    s2_findings = [Finding.model_validate(f) for f in json.loads(s2_file.read_text(encoding="utf-8"))] if s2_file.exists() else []
+
+    # Buat Union List
+    union_list, intersection_list = union_findings(zap_findings, s2_findings, scanner2_name=scanner2)
+    save_union(union_list, union_file)
+    typer.echo(f"[security-report] Union List disimpan ke: {union_file} ({len(union_list)} temuan, {len(intersection_list)} irisan)")
+
+    # Hitung metrik
+    metrics = compute_security_metrics(
+        zap_findings=zap_findings,
+        scanner2_findings=s2_findings,
+        union_findings=union_list,
+        ground_truth_path=ground_truth,
+        scanner2_name=scanner2,
+        out_dir=p_run,
+        match_param=match_param,
+    )
+
+    typer.echo("\n======================================================================")
+    typer.echo("               EVALUASI METRIK DETEKSI KEAMANAN DAST")
+    typer.echo("======================================================================")
+    import pandas as pd
+    csv_file = p_run / "security_metrics.csv"
+    if csv_file.exists():
+        df = pd.read_csv(csv_file)
+        typer.echo(df.to_string(index=False))
+
+    rec = metrics["recall_improvement"]
+    typer.echo("\n----------------------------------------------------------------------")
+    typer.echo("ANALISIS PENINGKATAN RECALL (UNION LIST vs SINGLE SCANNER):")
+    typer.echo(f"  - Pemindai Tunggal Terbaik : {rec['best_single_scanner']} ({rec['best_single_recall'] * 100:.2f}%)")
+    typer.echo(f"  - Recall Union List        : {rec['union_recall'] * 100:.2f}%")
+    typer.echo(f"  - Peningkatan Poin %       : +{rec['percentage_points']['vs_best_single']} pp")
+    typer.echo(f"  - Peningkatan Relatif      : +{rec['relative_percent']['vs_best_single']}%")
+
+    status_str = "[PASS]" if rec["target_passed_relative"] or rec["target_passed_percentage_points"] else "[FAIL]"
+    typer.echo(f"  - Status Target (>= 15%)   : {status_str}")
+    typer.echo(f"\n{metrics['disclaimer']}")
+    typer.echo("======================================================================\n")
+
+
+# ---------------------------------------------------------------------------
+# score
+# ---------------------------------------------------------------------------
+@app.command(name="score")
+def score_command(
+    run_dir: str = typer.Option("results/run1", "--run-dir", help="Direktori hasil audit"),
+    findings_file: Optional[str] = typer.Option(None, "--findings", help="Path file union.json atau findings.json"),
+    perf_file: Optional[str] = typer.Option(None, "--perf-file", help="Path file performance.json"),
+    allow_skip_perf: bool = typer.Option(False, "--allow-skip-perf", help="Hitung UPRI meskipun data performa tidak lengkap"),
+) -> None:
+    """Hitung Skor Kesiapan Produksi (UPRI), evaluasi Kill Switch, dan cetak Scorecard."""
+    import json
+    from audit.schemas import Finding
+    from audit.scorecard.engine import build_scorecard
+
+    p_run = Path(run_dir)
+
+    # 1. Cari file temuan keamanan
+    f_path = Path(findings_file) if findings_file else (p_run / "union.json")
+    if not f_path.exists():
+        f_path = p_run / "findings_zap.json"
+
+    findings: list[Finding] = []
+    if f_path.exists():
+        findings = [Finding.model_validate(f) for f in json.loads(f_path.read_text(encoding="utf-8"))]
+        typer.echo(f"[score] Memuat {len(findings)} temuan dari {f_path.name}")
+    else:
+        typer.echo(f"[score] Peringatan: Berkas temuan keamanan tidak ditemukan di {p_run}")
+
+    # 2. Cari file performa
+    p_perf_path = Path(perf_file) if perf_file else (p_run / "performance.json")
+    perf_profiles = None
+    if p_perf_path.exists():
+        raw_perf = json.loads(p_perf_path.read_text(encoding="utf-8"))
+        perf_profiles = raw_perf.get("profiles", raw_perf)
+        typer.echo(f"[score] Memuat data performa dari {p_perf_path.name}")
+
+    # 3. Hitung Scorecard
+    scorecard = build_scorecard(
+        run_id=p_run.name,
+        findings=findings,
+        profiles=perf_profiles,
+        out_dir=p_run,
+        allow_skip_perf=allow_skip_perf,
+    )
+
+    typer.echo("\n======================================================================")
+    typer.echo("                    API PRODUCTION READINESS SCORECARD")
+    typer.echo("======================================================================")
+    typer.echo(f"Run ID        : {scorecard.run_id}")
+    typer.echo(f"Ssec (Security)    : {scorecard.ssec:.2f} / 100.00")
+    typer.echo(f"Pperf (Performance): {scorecard.pperf:.2f} / 100.00")
+    typer.echo(f"UPRI Final         : {scorecard.upri:.2f} / 100.00")
+    typer.echo(f"Kill Switch Aktif  : {'YA' if scorecard.kill_switch else 'TIDAK'}")
+
+    if scorecard.kill_switch and scorecard.kill_reasons:
+        typer.echo("\nAlasan Kill Switch Dipicu:")
+        for r in scorecard.kill_reasons:
+            typer.echo(f"  [!] {r}")
+
+    typer.echo("----------------------------------------------------------------------")
+    typer.echo(f"KEPUTUSAN AKHIR : {scorecard.decision} (Exit Code: {scorecard.exit_code})")
+    typer.echo("----------------------------------------------------------------------")
+    typer.echo(f"Berkas hasil disimpan ke: {p_run / 'scorecard.json'}\n")
+
+    raise typer.Exit(code=scorecard.exit_code)
+
+
+# ---------------------------------------------------------------------------
 # run (full pipeline)
 # ---------------------------------------------------------------------------
 @app.command()

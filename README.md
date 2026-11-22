@@ -62,6 +62,8 @@ audit-cli/
     test_normalizer.py
     test_security_driver.py
     test_mlwaf.py
+    test_union_metrics.py
+    test_scorecard.py
 ```
 
 ## Docker Services
@@ -104,6 +106,12 @@ audit security --registry results/<run_id>/registry.json --scanner2 nuclei --out
 
 # Pelatihan model ML-WAF (CRISP-DM)
 audit train-waf [--data data/csic] [--out audit/mlwaf/model.joblib]
+
+# Evaluasi Metrik Keamanan (ZAP vs Scanner2 vs Union vs Ground Truth)
+audit security-report --run-dir results/<run_id> [--ground-truth data/ground_truth_juiceshop.json]
+
+# Hitung Scorecard & Keputusan Kesiapan Produksi (UPRI + Kill Switch)
+audit score --run-dir results/<run_id> [--perf-file results/<run_id>/performance.json]
 
 # Full pipeline (Blok 2+)
 audit run <url> [--spec PATH] [--header "..."] [--run-id <id>] [--scanner2 nuclei|arachni]
@@ -172,6 +180,14 @@ tail -f results/run1/security.log
 14. **Deduplikasi Sebelum Split** – Untuk mencegah kebocoran data (data leakage), permintaan HTTP dengan string method, URL, query, dan body ternormalisasi yang identik disaring sebelum pembagian train-test.
 
 15. **Fallback Generator Dataset Sintetis** – Jika dataset CSIC 2010 asli belum ditempatkan di `data/csic/`, sistem secara otomatis membuat dataset sintetis HTTP request untuk memverifikasi fungsionalitas pipeline secara end-to-end tanpa error.
+
+16. **Union List Aggregator & Deduplikasi Multitool** – Deduplikasi temuan menggabungkan ZAP dan scanner kedua berdasarkan tuple `(cwe, route, param, method)`. Duplikasi diselesaikan dengan mengambil severity tertinggi dan menandai `tool = "zap+<scanner2>"`. Urutan deterministik stabil berdasarkan tingkat keparahan, route, dan CWE.
+
+17. **Toleransi Pencocokan Ground Truth** – Temuan pemindai dinyatakan cocok dengan entri acuan (*True Positive*) apabila CWE dan route ternormalisasi identik (serta method HTTP). Pencocokan parameter dijadikan opsi toleransi (`--match-param`) agar variasi penamaan parameter antar-tool tidak mendistorsi pengukuran recall.
+
+18. **Scorecard Engine Deterministik (Fungsi Murni)** – Engine scorecard murni berbasis komputasi matematis tanpa I/O jaringan untuk memastikan konsistensi keputusan 100%. Komponen performa yang belum dievaluasi menghasilkan status `INCOMPLETE` (exit code 3).
+
+19. **Kill Switch Protektif** – Pemicu kill switch membatalkan nilai UPRI tinggi jika terdapat kerentanan Critical/High atau error/latensi tinggi pada profil Typical atau Peak. Profil Stress dikecualikan dari pemicu error rate karena bertujuan menguji daya tahan puncak sistem (*breaking point*).
 
 ## Rumus Scorecard
 
