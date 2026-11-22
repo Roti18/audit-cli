@@ -277,6 +277,150 @@ def score_command(
 
 
 # ---------------------------------------------------------------------------
+# waf (Active Defense Verifier)
+# ---------------------------------------------------------------------------
+@app.command(name="waf")
+def waf_command(
+    registry_path: str = typer.Option(
+        "results/default/registry.json", "--registry",
+        help="Path ke registry.json",
+    ),
+    out: str = typer.Option("results/default", "--out", help="Direktori output run"),
+    proxy_port: int = typer.Option(8082, "--proxy-port", help="Port reverse proxy mitmproxy WAF"),
+    model_path: str = typer.Option("audit/mlwaf/model.joblib", "--model", help="Path ke model joblib"),
+    target_url: Optional[str] = typer.Option(None, "--target-url", help="Override base target URL"),
+    allow_remote: bool = typer.Option(False, "--allow-remote", help="Izinkan target non-lokal"),
+) -> None:
+    """Verifikasi Active Defense ML-WAF secara real-time via mitmproxy reverse proxy."""
+    from audit.drivers.waf_verifier import run_waf_verifier
+
+    reg = load_json(Registry, registry_path)
+    target = target_url or reg.target_url
+    _ensure_local(target, allow_remote)
+
+    out_path = Path(out)
+    out_path.mkdir(parents=True, exist_ok=True)
+
+    typer.echo(f"[waf] Memulai verifikasi real-time ML-WAF terhadap {target}...")
+    typer.echo(f"[waf] Proxy port: {proxy_port} | Model: {model_path}")
+
+    res = run_waf_verifier(
+        registry=reg,
+        run_dir=out_path,
+        proxy_port=proxy_port,
+        model_path=model_path,
+        target_url=target,
+    )
+
+    if not res.get("evaluated", True):
+        typer.echo(f"[waf] Error: {res.get('error')}")
+        raise typer.Exit(code=1)
+
+    m = res.get("realtime_metrics", {})
+    typer.echo("\n======================================================================")
+    typer.echo("               HASIL EVALUASI REAL-TIME ACTIVE DEFENSE (ML-WAF)")
+    typer.echo("======================================================================")
+    typer.echo(f"Total Uji Request    : {res.get('total_test_requests')}")
+    typer.echo(f"  - Request Normal   : {res.get('normal_requests_count')}")
+    typer.echo(f"  - Request Serangan : {res.get('attack_requests_count')}")
+    typer.echo("----------------------------------------------------------------------")
+    typer.echo(f"Akurasi Real-Time    : {m.get('accuracy', 0.0) * 100:.2f}% (Target: >= 90%)")
+    typer.echo(f"Precision            : {m.get('precision', 0.0) * 100:.2f}%")
+    typer.echo(f"Recall               : {m.get('recall', 0.0) * 100:.2f}%")
+    typer.echo(f"F1-Score             : {m.get('f1', 0.0) * 100:.2f}%")
+    typer.echo(f"False Positive Rate  : {m.get('fpr', 0.0) * 100:.2f}%")
+    typer.echo("----------------------------------------------------------------------")
+    typer.echo(f"Baseline Keyword Acc : {res.get('baseline_accuracy', 0.0) * 100:.2f}%")
+    if res.get("hold_out_accuracy_csic") is not None:
+        typer.echo(f"Hold-out CSIC Acc    : {res.get('hold_out_accuracy_csic') * 100:.2f}%")
+    status_str = "[PASS]" if res.get("target_passed") else "[FAIL]"
+    typer.echo(f"Status Target Akurasi: {status_str}")
+    typer.echo(f"\n{res.get('note')}")
+    typer.echo("======================================================================\n")
+
+
+# ---------------------------------------------------------------------------
+# perf (Performance Driver)
+# ---------------------------------------------------------------------------
+@app.command(name="perf")
+def perf_command(
+    registry_path: str = typer.Option(
+        "results/default/registry.json", "--registry",
+        help="Path ke registry.json",
+    ),
+    out: str = typer.Option("results/default", "--out", help="Direktori output run"),
+    profiles: str = typer.Option(
+        "typical,peak,stress,spike", "--profiles",
+        help="Daftar profil pengujian dipisahkan koma (typical,peak,stress,spike)",
+    ),
+    scale: float = typer.Option(1.0, "--scale", help="Faktor skala beban VU (misal 0.1 untuk laptop spek rendah)"),
+    quick: bool = typer.Option(False, "--quick", help="Mode cepat (durasi pengujian dipersingkat untuk dry-run)"),
+    container: str = typer.Option("juice-shop", "--container", help="Nama kontainer Docker target untuk restart dan monitoring"),
+    target_url: Optional[str] = typer.Option(None, "--target-url", help="Override base target URL"),
+    allow_remote: bool = typer.Option(False, "--allow-remote", help="Izinkan target non-lokal"),
+) -> None:
+    """Jalankan Performance Driver (k6) dengan profil Typical, Peak, Stress, dan Spike."""
+    from audit.drivers.performance import run_performance
+
+    reg = load_json(Registry, registry_path)
+    target = target_url or reg.target_url
+    _ensure_local(target, allow_remote)
+
+    out_path = Path(out)
+    out_path.mkdir(parents=True, exist_ok=True)
+
+    prof_list = [p.strip().lower() for p in profiles.split(",") if p.strip()]
+
+    typer.echo(f"[perf] Memulai pengujian performa k6 terhadap {target}...")
+    typer.echo(f"[perf] Profil: {', '.join(prof_list)} | Scale: {scale} | Quick: {quick}")
+
+    def _progress(msg: str) -> None:
+        typer.echo(f"  [>] {msg}")
+
+    result = run_performance(
+        registry=reg,
+        run_dir=out_path,
+        profiles=prof_list,
+        scale=scale,
+        quick=quick,
+        container_name=container,
+        target_url=target,
+        progress_callback=_progress,
+    )
+
+    if not result.get("evaluated", True):
+        typer.echo(f"[perf] Error/Skipped: {result.get('error')}")
+        raise typer.Exit(code=1)
+
+    typer.echo("\n=========================================================================================")
+    typer.echo("                       RINGKASAN HASIL PENGUJIAN PERFORMA (k6)")
+    typer.echo("=========================================================================================")
+    import pandas as pd
+    rows = []
+    for prof_name, p_data in result.get("profiles", {}).items():
+        rows.append({
+            "Profil": prof_name.upper(),
+            "VUs": p_data.get("target_vus", "-"),
+            "RPS": p_data.get("rps", 0.0),
+            "Avg Lat (ms)": p_data.get("latency_avg_ms", 0.0),
+            "P95 (ms)": p_data.get("latency_p95_ms", 0.0),
+            "P99 (ms)": p_data.get("latency_p99_ms", 0.0),
+            "Error Rate": f"{p_data.get('error_rate', 0.0) * 100:.2f}%",
+            "CPU Peak": f"{p_data.get('cpu_pct_peak', 0.0):.1f}%",
+            "Mem Peak": f"{p_data.get('mem_pct_peak', 0.0):.1f}%",
+            "Pperf": f"{p_data.get('pperf', 0.0):.2f}",
+        })
+
+    if rows:
+        df = pd.DataFrame(rows)
+        typer.echo(df.to_string(index=False))
+
+    typer.echo("-----------------------------------------------------------------------------------------")
+    typer.echo(f"AGGREGATE PPERF (Typical, Peak, Stress): {result.get('aggregate_pperf', 0.0):.2f} / 100.00")
+    typer.echo(f"Berkas hasil disimpan ke: {out_path / 'performance.json'}\n")
+
+
+# ---------------------------------------------------------------------------
 # run (full pipeline)
 # ---------------------------------------------------------------------------
 @app.command()

@@ -113,6 +113,12 @@ audit security-report --run-dir results/<run_id> [--ground-truth data/ground_tru
 # Hitung Scorecard & Keputusan Kesiapan Produksi (UPRI + Kill Switch)
 audit score --run-dir results/<run_id> [--perf-file results/<run_id>/performance.json]
 
+# Verifikasi Real-Time Active Defense (ML-WAF mitmproxy reverse proxy)
+audit waf --registry results/<run_id>/registry.json --out results/<run_id> [--proxy-port 8082]
+
+# Pengujian Beban & Performa API (k6)
+audit perf --registry results/<run_id>/registry.json --out results/<run_id> [--quick] [--scale 0.1]
+
 # Full pipeline (Blok 2+)
 audit run <url> [--spec PATH] [--header "..."] [--run-id <id>] [--scanner2 nuclei|arachni]
 ```
@@ -188,6 +194,10 @@ tail -f results/run1/security.log
 18. **Scorecard Engine Deterministik (Fungsi Murni)** – Engine scorecard murni berbasis komputasi matematis tanpa I/O jaringan untuk memastikan konsistensi keputusan 100%. Komponen performa yang belum dievaluasi menghasilkan status `INCOMPLETE` (exit code 3).
 
 19. **Kill Switch Protektif** – Pemicu kill switch membatalkan nilai UPRI tinggi jika terdapat kerentanan Critical/High atau error/latensi tinggi pada profil Typical atau Peak. Profil Stress dikecualikan dari pemicu error rate karena bertujuan menguji daya tahan puncak sistem (*breaking point*).
+
+20. **Active Defense Verifier (mitmproxy + ML-WAF Runtime)** – Mitmproxy add-on (`audit/mlwaf/mitm_addon.py`) berjalan sebagai reverse proxy (port 8082), mencegat permintaan HTTP sebelum ke target dan mengklasifikasikan menggunakan model Decision Tree (HTTP 403 Forbidden + header `X-WAF-Decision: blocked` jika anomali/serangan; lolos dengan `X-WAF-Decision: allowed` jika sah). Pengujian real-time memakai data independen (permintaan sah dari registry vs riwayat serangan ZAP/sintetis, tanpa memakai sampel CSIC). Hasil WAF dicatat di `waf.json` dan confusion matrix PNG secara terpisah tanpa mengubah formula $S_{sec}$ UPRI.
+
+21. **Performance Driver (k6) & Resource Monitoring** – Skrip k6 JavaScript digenerasi dinamis dari rute aman Registry (GET dan POST pencarian/idempotent). Menyediakan 4 profil beban (*Typical*, *Peak*, *Stress*, *Spike*) dengan opsi `--scale` dan `--quick` untuk lingkungan laptop berspesifikasi standar. Resource monitor mencuplik penggunaan CPU & memori kontainer via `docker stats` (dinormalisasi ke acuan 2 core / 2 GB), dengan fallback mulus ke `psutil` host jika Docker offline. Target kontainer di-restart dan di-polling healthcheck sebelum tiap profil agar kondisi awal bersih.
 
 ## Rumus Scorecard
 
