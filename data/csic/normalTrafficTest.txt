@@ -1,0 +1,1465 @@
+# SYNTHETIC CSIC DATASET FOR PIPELINE VERIFICATION
+
+GET http://localhost:8080/tienda1/index.jsp?seed=0 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=1 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=2 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=3 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=4 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=5 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 34
+
+user=john_doe&pass=secret123&seq=5
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=6 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 37
+
+payment_method=cc&amount=150.00&seq=6
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=7 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 45
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=7
+
+POST http://localhost:8080/tienda1/register.jsp?seed=8 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 45
+
+email=user%40test.com&username=usertest&seq=8
+
+GET http://localhost:8080/tienda1/index.jsp?seed=9 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=10 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=11 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=12 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=13 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=14 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 35
+
+user=john_doe&pass=secret123&seq=14
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=15 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 38
+
+payment_method=cc&amount=150.00&seq=15
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=16 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=16
+
+POST http://localhost:8080/tienda1/register.jsp?seed=17 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+email=user%40test.com&username=usertest&seq=17
+
+GET http://localhost:8080/tienda1/index.jsp?seed=18 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=19 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=20 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=21 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=22 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=23 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 35
+
+user=john_doe&pass=secret123&seq=23
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=24 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 38
+
+payment_method=cc&amount=150.00&seq=24
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=25 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=25
+
+POST http://localhost:8080/tienda1/register.jsp?seed=26 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+email=user%40test.com&username=usertest&seq=26
+
+GET http://localhost:8080/tienda1/index.jsp?seed=27 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=28 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=29 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=30 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=31 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=32 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 35
+
+user=john_doe&pass=secret123&seq=32
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=33 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 38
+
+payment_method=cc&amount=150.00&seq=33
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=34 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=34
+
+POST http://localhost:8080/tienda1/register.jsp?seed=35 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+email=user%40test.com&username=usertest&seq=35
+
+GET http://localhost:8080/tienda1/index.jsp?seed=36 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=37 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=38 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=39 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=40 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=41 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 35
+
+user=john_doe&pass=secret123&seq=41
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=42 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 38
+
+payment_method=cc&amount=150.00&seq=42
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=43 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=43
+
+POST http://localhost:8080/tienda1/register.jsp?seed=44 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+email=user%40test.com&username=usertest&seq=44
+
+GET http://localhost:8080/tienda1/index.jsp?seed=45 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=46 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=47 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=48 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=49 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=50 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 35
+
+user=john_doe&pass=secret123&seq=50
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=51 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 38
+
+payment_method=cc&amount=150.00&seq=51
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=52 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=52
+
+POST http://localhost:8080/tienda1/register.jsp?seed=53 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+email=user%40test.com&username=usertest&seq=53
+
+GET http://localhost:8080/tienda1/index.jsp?seed=54 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=55 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=56 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=57 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=58 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=59 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 35
+
+user=john_doe&pass=secret123&seq=59
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=60 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 38
+
+payment_method=cc&amount=150.00&seq=60
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=61 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=61
+
+POST http://localhost:8080/tienda1/register.jsp?seed=62 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+email=user%40test.com&username=usertest&seq=62
+
+GET http://localhost:8080/tienda1/index.jsp?seed=63 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=64 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=65 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=66 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=67 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=68 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 35
+
+user=john_doe&pass=secret123&seq=68
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=69 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 38
+
+payment_method=cc&amount=150.00&seq=69
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=70 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=70
+
+POST http://localhost:8080/tienda1/register.jsp?seed=71 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+email=user%40test.com&username=usertest&seq=71
+
+GET http://localhost:8080/tienda1/index.jsp?seed=72 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=73 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=74 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=75 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=76 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=77 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 35
+
+user=john_doe&pass=secret123&seq=77
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=78 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 38
+
+payment_method=cc&amount=150.00&seq=78
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=79 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=79
+
+POST http://localhost:8080/tienda1/register.jsp?seed=80 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+email=user%40test.com&username=usertest&seq=80
+
+GET http://localhost:8080/tienda1/index.jsp?seed=81 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=82 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=83 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=84 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=85 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=86 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 35
+
+user=john_doe&pass=secret123&seq=86
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=87 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 38
+
+payment_method=cc&amount=150.00&seq=87
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=88 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=88
+
+POST http://localhost:8080/tienda1/register.jsp?seed=89 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+email=user%40test.com&username=usertest&seq=89
+
+GET http://localhost:8080/tienda1/index.jsp?seed=90 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=91 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=92 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=93 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=94 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=95 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 35
+
+user=john_doe&pass=secret123&seq=95
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=96 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 38
+
+payment_method=cc&amount=150.00&seq=96
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=97 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=97
+
+POST http://localhost:8080/tienda1/register.jsp?seed=98 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+email=user%40test.com&username=usertest&seq=98
+
+GET http://localhost:8080/tienda1/index.jsp?seed=99 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=100 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=101 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=102 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=103 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=104 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+user=john_doe&pass=secret123&seq=104
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=105 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+payment_method=cc&amount=150.00&seq=105
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=106 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=106
+
+POST http://localhost:8080/tienda1/register.jsp?seed=107 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+email=user%40test.com&username=usertest&seq=107
+
+GET http://localhost:8080/tienda1/index.jsp?seed=108 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=109 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=110 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=111 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=112 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=113 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+user=john_doe&pass=secret123&seq=113
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=114 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+payment_method=cc&amount=150.00&seq=114
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=115 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=115
+
+POST http://localhost:8080/tienda1/register.jsp?seed=116 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+email=user%40test.com&username=usertest&seq=116
+
+GET http://localhost:8080/tienda1/index.jsp?seed=117 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=118 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=119 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=120 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=121 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=122 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+user=john_doe&pass=secret123&seq=122
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=123 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+payment_method=cc&amount=150.00&seq=123
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=124 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=124
+
+POST http://localhost:8080/tienda1/register.jsp?seed=125 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+email=user%40test.com&username=usertest&seq=125
+
+GET http://localhost:8080/tienda1/index.jsp?seed=126 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=127 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=128 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=129 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=130 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=131 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+user=john_doe&pass=secret123&seq=131
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=132 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+payment_method=cc&amount=150.00&seq=132
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=133 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=133
+
+POST http://localhost:8080/tienda1/register.jsp?seed=134 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+email=user%40test.com&username=usertest&seq=134
+
+GET http://localhost:8080/tienda1/index.jsp?seed=135 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=136 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=137 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=138 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=139 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=140 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+user=john_doe&pass=secret123&seq=140
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=141 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+payment_method=cc&amount=150.00&seq=141
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=142 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=142
+
+POST http://localhost:8080/tienda1/register.jsp?seed=143 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+email=user%40test.com&username=usertest&seq=143
+
+GET http://localhost:8080/tienda1/index.jsp?seed=144 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=145 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=146 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=147 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=148 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=149 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+user=john_doe&pass=secret123&seq=149
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=150 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+payment_method=cc&amount=150.00&seq=150
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=151 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=151
+
+POST http://localhost:8080/tienda1/register.jsp?seed=152 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+email=user%40test.com&username=usertest&seq=152
+
+GET http://localhost:8080/tienda1/index.jsp?seed=153 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=154 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=155 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=156 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=157 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=158 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+user=john_doe&pass=secret123&seq=158
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=159 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+payment_method=cc&amount=150.00&seq=159
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=160 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=160
+
+POST http://localhost:8080/tienda1/register.jsp?seed=161 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+email=user%40test.com&username=usertest&seq=161
+
+GET http://localhost:8080/tienda1/index.jsp?seed=162 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=163 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=164 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=165 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=166 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=167 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+user=john_doe&pass=secret123&seq=167
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=168 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+payment_method=cc&amount=150.00&seq=168
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=169 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=169
+
+POST http://localhost:8080/tienda1/register.jsp?seed=170 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+email=user%40test.com&username=usertest&seq=170
+
+GET http://localhost:8080/tienda1/index.jsp?seed=171 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=172 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=173 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=174 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=175 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=176 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+user=john_doe&pass=secret123&seq=176
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=177 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+payment_method=cc&amount=150.00&seq=177
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=178 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=178
+
+POST http://localhost:8080/tienda1/register.jsp?seed=179 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+email=user%40test.com&username=usertest&seq=179
+
+GET http://localhost:8080/tienda1/index.jsp?seed=180 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=181 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=182 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=183 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=184 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=185 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+user=john_doe&pass=secret123&seq=185
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=186 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+payment_method=cc&amount=150.00&seq=186
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=187 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=187
+
+POST http://localhost:8080/tienda1/register.jsp?seed=188 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+email=user%40test.com&username=usertest&seq=188
+
+GET http://localhost:8080/tienda1/index.jsp?seed=189 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=190 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/carrito.jsp?item=10&qty=2&seed=191 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/mi_cuenta.jsp?user_id=105&seed=192 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/articulos.jsp?page=2&order=asc&seed=193 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+POST http://localhost:8080/tienda1/login.jsp?seed=194 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 36
+
+user=john_doe&pass=secret123&seq=194
+
+POST http://localhost:8080/tienda1/checkout.jsp?seed=195 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+payment_method=cc&amount=150.00&seq=195
+
+POST http://localhost:8080/tienda1/feedback.jsp?seed=196 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+rating=5&comment=Pelayanan+sangat+bagus&seq=196
+
+POST http://localhost:8080/tienda1/register.jsp?seed=197 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 47
+
+email=user%40test.com&username=usertest&seq=197
+
+GET http://localhost:8080/tienda1/index.jsp?seed=198 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
+
+GET http://localhost:8080/tienda1/publico/productos.jsp?categoria=1&seed=199 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+Accept: text/html,application/xhtml+xml
+Host: localhost:8080
+
