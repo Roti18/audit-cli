@@ -312,28 +312,36 @@ def parse_raw_requests(file_or_path: str | Path) -> list[dict[str, Any]]:
 
     # Cek jika format CSV
     if p.suffix.lower() == ".csv":
+        import pandas as pd
+        df = pd.read_csv(p, keep_default_na=False, dtype=str)
+        col_method = next((c for c in df.columns if c.lower() == "method"), "Method")
+        col_url = next((c for c in df.columns if c.lower() in ("url", "path")), "URL")
+        col_body = next((c for c in df.columns if c.lower() in ("content", "body", "data")), "content")
+        col_query = next((c for c in df.columns if c.lower() in ("query", "parameters")), "query")
+        col_label = next((c for c in df.columns if c.lower() in ("classification", "label")), "classification")
+
         requests: list[dict[str, Any]] = []
-        with open(p, "r", encoding="utf-8", errors="ignore") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                # Menangani berbagai nama kolom umum Kaggle
-                method = row.get("Method") or row.get("method") or "GET"
-                raw_url = row.get("URL") or row.get("url") or row.get("Path") or "/"
-                query = row.get("query") or row.get("parameters") or ""
-                body = row.get("body") or row.get("data") or row.get("content") or ""
+        for row in df.itertuples(index=False):
+            d = row._asdict()
+            method = str(d.get(col_method, "GET")).strip().upper()
+            raw_url = str(d.get(col_url, "/")).strip().split(" ")[0]
+            parsed = urlparse(raw_url)
+            query = d.get(col_query, "") or parsed.query or ""
+            body = d.get(col_body, "") or ""
 
-                parsed = urlparse(raw_url)
-                if not query and parsed.query:
-                    query = parsed.query
+            try:
+                label_val = int(d.get(col_label, 0))
+            except (ValueError, TypeError):
+                label_val = 0
 
-                requests.append({
-                    "method": method.upper(),
-                    "url": parsed.path or raw_url,
-                    "query": query,
-                    "body": body,
-                    "headers": {},
-                    "label": int(row.get("classification") or row.get("label") or 0),
-                })
+            requests.append({
+                "method": method,
+                "url": parsed.path or raw_url,
+                "query": query,
+                "body": body,
+                "headers": {},
+                "label": label_val,
+            })
         return requests
 
     # Format raw HTTP .txt
