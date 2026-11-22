@@ -61,6 +61,7 @@ audit-cli/
     test_functional.py
     test_normalizer.py
     test_security_driver.py
+    test_mlwaf.py
 ```
 
 ## Docker Services
@@ -100,6 +101,9 @@ audit functional --registry results/<run_id>/registry.json [--run-id <id>]
 
 # Security audit saja (ZAP + scanner kedua)
 audit security --registry results/<run_id>/registry.json --scanner2 nuclei --out results/<run_id> --max-minutes 30
+
+# Pelatihan model ML-WAF (CRISP-DM)
+audit train-waf [--data data/csic] [--out audit/mlwaf/model.joblib]
 
 # Full pipeline (Blok 2+)
 audit run <url> [--spec PATH] [--header "..."] [--run-id <id>] [--scanner2 nuclei|arachni]
@@ -160,6 +164,14 @@ tail -f results/run1/security.log
 11. **Param field menggunakan alias `in`** – Pydantic model `Param` menyimpan lokasi sebagai
     `location` secara internal, tetapi serialisasi menggunakan alias `"in"` agar sesuai dengan
     format OpenAPI spec.
+
+12. **Modul Ekstraksi Fitur ML-WAF Tunggal (Zero Train-Serve Skew)** – Modul `audit.mlwaf.features` dipakai bersama oleh skrip pelatihan (`train.py`) dan runtime reverse-proxy WAF (`mitmproxy addon`), memastikan vektor fitur yang diekstrak selalu identik urutan dan perhitungannya.
+
+13. **Metodologi CRISP-DM untuk ML-WAF** – Pelatihan mengikuti 6 tahap CRISP-DM: Business Understanding, Data Understanding, Data Preparation (dedup sebelum split, stratified 80:20), Modeling (Decision Tree criterion='entropy' dengan 5-fold CV GridSearchCV hanya di data train), Evaluation (hold-out test set vs baseline), dan Deployment (bundle joblib + confusion matrix PNG + laporan JSON/CSV).
+
+14. **Deduplikasi Sebelum Split** – Untuk mencegah kebocoran data (data leakage), permintaan HTTP dengan string method, URL, query, dan body ternormalisasi yang identik disaring sebelum pembagian train-test.
+
+15. **Fallback Generator Dataset Sintetis** – Jika dataset CSIC 2010 asli belum ditempatkan di `data/csic/`, sistem secara otomatis membuat dataset sintetis HTTP request untuk memverifikasi fungsionalitas pipeline secara end-to-end tanpa error.
 
 ## Rumus Scorecard
 

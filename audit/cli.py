@@ -130,6 +130,22 @@ def security(
 
 
 # ---------------------------------------------------------------------------
+# train-waf
+# ---------------------------------------------------------------------------
+@app.command(name="train-waf")
+def train_waf_command(
+    data_dir: str = typer.Option("data/csic", "--data", help="Direktori dataset CSIC 2010"),
+    model_out: str = typer.Option("audit/mlwaf/model.joblib", "--out", help="Path output file model joblib"),
+    results_dir: str = typer.Option("results", "--results", help="Direktori output laporan dan grafik"),
+) -> None:
+    """Latih model ML-WAF Decision Tree dengan tahapan metodologi CRISP-DM."""
+    from audit.mlwaf.train import train_mlwaf
+
+    typer.echo("[train-waf] Memulai proses training CRISP-DM...")
+    train_mlwaf(data_dir=data_dir, model_output=model_out, results_dir=results_dir)
+
+
+# ---------------------------------------------------------------------------
 # run (full pipeline)
 # ---------------------------------------------------------------------------
 @app.command()
