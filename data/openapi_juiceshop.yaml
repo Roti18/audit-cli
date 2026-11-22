@@ -1,0 +1,437 @@
+openapi: "3.0.3"
+info:
+  title: OWASP Juice Shop API (Manual Subset)
+  description: >
+    Spec manual untuk 15 endpoint representatif OWASP Juice Shop,
+    dibuat untuk keperluan audit-cli framework.
+  version: "1.0.0"
+
+servers:
+  - url: http://localhost:3000
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        authentication:
+          type: object
+          properties:
+            token:
+              type: string
+            bid:
+              type: integer
+            umail:
+              type: string
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        deluxePrice:
+          type: number
+        image:
+          type: string
+
+    ProductList:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        role:
+          type: string
+
+    UserCreateRequest:
+      type: object
+      required: [email, password, passwordRepeat, securityQuestion, securityAnswer]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        passwordRepeat:
+          type: string
+        securityQuestion:
+          type: object
+          properties:
+            id:
+              type: integer
+        securityAnswer:
+          type: string
+
+    BasketItem:
+      type: object
+      properties:
+        ProductId:
+          type: integer
+        BasketId:
+          type: integer
+        quantity:
+          type: integer
+
+    BasketItemRequest:
+      type: object
+      required: [ProductId, BasketId, quantity]
+      properties:
+        ProductId:
+          type: integer
+        BasketId:
+          type: integer
+        quantity:
+          type: integer
+
+    Feedback:
+      type: object
+      properties:
+        id:
+          type: integer
+        comment:
+          type: string
+        rating:
+          type: integer
+        UserId:
+          type: integer
+
+    FeedbackRequest:
+      type: object
+      required: [comment, rating, captchaId, captcha]
+      properties:
+        comment:
+          type: string
+        rating:
+          type: integer
+        captchaId:
+          type: integer
+        captcha:
+          type: string
+
+    SearchResult:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+
+    WhoAmI:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+            email:
+              type: string
+
+    Challenge:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+        difficulty:
+          type: integer
+        solved:
+          type: boolean
+
+    VersionResponse:
+      type: object
+      properties:
+        version:
+          type: string
+
+    TrackOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+
+paths:
+  /rest/user/login:
+    post:
+      summary: Login pengguna
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Login berhasil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /rest/products/search:
+    get:
+      summary: Cari produk berdasarkan query
+      security: []
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Daftar produk sesuai query
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+
+  /api/Products:
+    get:
+      summary: Daftar semua produk
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductList"
+
+  /api/Products/{id}:
+    get:
+      summary: Detail produk
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Not Found
+
+  /api/Users:
+    post:
+      summary: Registrasi user baru
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreateRequest"
+      responses:
+        "201":
+          description: User dibuat
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Bad request
+
+  /api/Users/{id}:
+    get:
+      summary: Detail user (butuh auth)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /rest/basket/{id}:
+    get:
+      summary: Isi keranjang (butuh auth)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+
+  /api/BasketItems:
+    post:
+      summary: Tambah item ke keranjang (butuh auth)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BasketItemRequest"
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "400":
+          description: Bad request
+
+  /rest/user/whoami:
+    get:
+      summary: Info user saat ini (butuh auth)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WhoAmI"
+        "401":
+          description: Unauthorized
+
+  /api/Feedbacks:
+    get:
+      summary: Daftar feedback (butuh auth admin)
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+    post:
+      summary: Kirim feedback (tanpa auth)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeedbackRequest"
+      responses:
+        "201":
+          description: Feedback dibuat
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Feedback"
+        "400":
+          description: Bad request
+
+  /rest/track-order/{id}:
+    get:
+      summary: Lacak pesanan
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrackOrderResponse"
+
+  /api/Challenges:
+    get:
+      summary: Daftar challenge (tanpa auth)
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Challenge"
+
+  /rest/admin/application-version:
+    get:
+      summary: Versi aplikasi
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionResponse"

@@ -1,0 +1,48 @@
+version: "3.9"
+
+networks:
+  audit-net:
+    driver: bridge
+
+services:
+  juice-shop:
+    image: bkimminich/juice-shop
+    container_name: juice-shop
+    ports:
+      - "3000:3000"
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - audit-net
+
+  zap:
+    image: zaproxy/zap-stable
+    container_name: zap
+    command: >
+      zap.sh -daemon -host 0.0.0.0 -port 8080
+      -config api.key=changeme
+      -config api.addrs.addr.name=.*
+      -config api.addrs.addr.regex=true
+    ports:
+      - "8080:8080"
+    depends_on:
+      juice-shop:
+        condition: service_healthy
+    networks:
+      - audit-net
+
+  nuclei:
+    image: projectdiscovery/nuclei:latest
+    container_name: nuclei
+    entrypoint: ["sleep", "infinity"]
+    networks:
+      - audit-net

@@ -1,0 +1,158 @@
+# audit-cli
+
+**Framework Audit Kesiapan Produksi API berbasis CLI** – Proyek Skripsi
+
+## Quick Start
+
+```bash
+# 1. Install dependencies
+pip install -e ".[dev]"
+
+# 2. Start Docker services
+docker compose up -d
+
+# 3. Verify services
+docker compose ps
+curl http://localhost:3000/      # Juice Shop
+curl http://localhost:8080/       # ZAP API
+
+# 4. Run discovery
+audit discover http://localhost:3000 --spec data/openapi_juiceshop.yaml --out results/run1
+
+# 5. Run functional tests
+audit functional --registry results/run1/registry.json --run-id run1
+
+# 6. Run pytest
+pytest
+```
+
+## Struktur Repo
+
+```
+audit-cli/
+  docker-compose.yml
+  pyproject.toml
+  README.md
+  data/                            # Spec & data manual
+    openapi_juiceshop.yaml
+  results/                         # Semua output run
+  audit/
+    __init__.py
+    cli.py                         # Entry point Typer
+    schemas.py                     # Pydantic models (Route, Registry, Finding, dll)
+    discovery/openapi.py           # OpenAPI/Swagger parser
+    drivers/functional.py          # Functional test driver
+    drivers/security.py            # (Blok 2) ZAP + scanner kedua
+    drivers/waf_verifier.py        # (Blok 2) ML-WAF check
+    drivers/performance.py         # (Blok 2) k6 driver
+    security/normalizer.py         # (Blok 2)
+    security/union.py              # (Blok 2)
+    security/metrics.py            # (Blok 2)
+    scorecard/engine.py            # (Blok 2)
+    report/generator.py            # (Blok 2)
+    report/templates/report.html.j2
+    mlwaf/features.py              # (Blok 3)
+    mlwaf/train.py                 # (Blok 3)
+    mlwaf/mitm_addon.py            # (Blok 3)
+    mlwaf/model.joblib             # (Blok 3)
+  tests/
+    test_schemas.py
+    test_discovery.py
+    test_functional.py
+```
+
+## Docker Services
+
+| Service    | Image                           | Port | Verifikasi                                            |
+| ---------- | ------------------------------- | ---- | ----------------------------------------------------- |
+| juice-shop | bkimminich/juice-shop           | 3000 | `curl -s http://localhost:3000/ \| head -5`           |
+| zap        | zaproxy/zap-stable              | 8080 | `curl http://localhost:8080/JSON/core/view/version/`  |
+| nuclei     | projectdiscovery/nuclei:latest  | –    | `docker compose exec nuclei nuclei --version`         |
+
+### Tentang Scanner Kedua
+
+Arachni sudah deprecated dan image Docker-nya tidak lagi maintained. Sebagai pengganti,
+digunakan **Nuclei** (ProjectDiscovery) yang aktif dikembangkan dan memiliki template
+vulnerability scanner yang luas.
+
+Jika ingin tetap mencoba Arachni:
+```bash
+# Ganti service nuclei di docker-compose.yml dengan:
+#   arachni:
+#     image: arachni/arachni
+#     ...
+# Lalu jalankan:
+docker compose run --rm arachni arachni --version
+```
+
+Pemilihan scanner kedua dikontrol lewat flag `--scanner2 nuclei|arachni` pada command `audit run`.
+
+## CLI Commands
+
+```bash
+# Discovery saja
+audit discover <url> [--spec PATH] [--header "Authorization: Bearer x"] --out results/<run_id>
+
+# Functional test saja
+audit functional --registry results/<run_id>/registry.json [--run-id <id>]
+
+# Full pipeline (Blok 2+)
+audit run <url> [--spec PATH] [--header "..."] [--run-id <id>] [--scanner2 nuclei|arachni]
+```
+
+## Keputusan Desain
+
+1. **Pperf dihitung per profil** (typical, peak, stress, spike), lalu Pperf final = rata-rata
+   typical+peak+stress. Spike dilaporkan terpisah karena sifatnya yang sementara/transient dan
+   tidak merepresentasikan kondisi operasi normal.
+
+2. **Presource = 100 − max(cpu_pct, mem_pct)** dengan cpu_pct dinormalisasi terhadap batas
+   2 core dan mem_pct terhadap 2 GB. Nilai puncak (peak) selama tes yang digunakan, dibatasi
+   0–100. Ini menyederhanakan metrik resource menjadi satu angka "headroom".
+
+3. **Nuclei sebagai scanner kedua** (pengganti Arachni yang deprecated). Nuclei aktif
+   dikembangkan, memiliki >6000 template vulnerability, dan lebih reliable di Docker.
+
+4. **OpenAPI spec manual untuk Juice Shop** – Juice Shop tidak menyediakan spec lengkap,
+   sehingga 15 endpoint representatif didefinisikan manual di `data/openapi_juiceshop.yaml`.
+
+5. **Functional driver tidak crash pada mismatch** – Test case yang gagal dicatat sebagai
+   `passed: false` dengan detail, bukan exception yang menghentikan audit.
+
+6. **Traffic hanya ke staging lokal** – URL non-lokal ditolak kecuali flag `--allow-remote`
+   diberikan, untuk mencegah audit yang tidak disengaja ke production.
+
+7. **Param field menggunakan alias `in`** – Pydantic model `Param` menyimpan lokasi sebagai
+   `location` secara internal, tetapi serialisasi menggunakan alias `"in"` agar sesuai dengan
+   format OpenAPI spec.
+
+## Rumus Scorecard
+
+```
+Ssec = max(0, 100 - Σ(Ni × Wi))
+  Wi: Critical=100, High=50, Medium=15, Low=5
+
+Platency = ((L - μ) / L) × 100  jika μ < L, else 0  (L = 500ms)
+
+Presource = 100 - max(cpu_pct, mem_pct), clamp 0..100
+
+Pperf = 0.5 × (100 × (1 - ER)) + 0.3 × Platency + 0.2 × Presource
+
+UPRI = 0.6 × Ssec + 0.4 × Pperf
+
+Kill switch aktif jika:
+  (a) ≥1 temuan Critical/High di Union List, ATAU
+  (b) ER > 0 pada profil Typical/Peak, ATAU
+  (c) Platency = 0 pada profil Typical/Peak
+
+Keputusan:
+  kill switch aktif ATAU UPRI < 70  → REJECTED (exit 2)
+  70 ≤ UPRI < 85                   → CONDITIONAL PASS (exit 1)
+  UPRI ≥ 85                        → PASSED (exit 0)
+```
+
+## Testing
+
+```bash
+pytest -v
+```
