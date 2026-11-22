@@ -30,7 +30,7 @@ dev = [
 ]
 
 [project.scripts]
-audit = "audit.cli:app"
+audit = "audit.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["audit*"]
